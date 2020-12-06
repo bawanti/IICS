@@ -1,0 +1,50 @@
+<aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.com/appmodules/repository/2010/10/avrepository.xsd"
+                   xmlns:types1="http://schemas.active-endpoints.com/appmodules/repository/2010/10/avrepository.xsd">
+   <types1:Item>
+      <types1:EntryId>ALonEBNjDg8SOlA-gt-15849615-2020-05-14T22:13:06.043Z::conn.xml</types1:EntryId>
+      <types1:Name>Reltio</types1:Name>
+      <types1:MimeType>application/xml+connection</types1:MimeType>
+      <types1:Description>This connection will be used interact with Reltio APIs</types1:Description>
+      <types1:AppliesTo/>
+      <types1:Tags/>
+      <types1:VersionLabel>1.0</types1:VersionLabel>
+      <types1:State>CURRENT</types1:State>
+      <types1:ProcessGroup/>
+      <types1:CreatedBy>basav1@iics.com</types1:CreatedBy>
+      <types1:CreationDate>2020-05-14T22:13:06Z</types1:CreationDate>
+      <types1:ModifiedBy/>
+      <types1:PublicationStatus>unpublished</types1:PublicationStatus>
+      <types1:AutosaveExists>false</types1:AutosaveExists>
+      <types1:Entry>
+         <connection xmlns="http://schemas.informatica.com/socrates/data-services/2014/04/avosConnections.xsd"
+                     displayName="Reltio"
+                     label="Reltio"
+                     name="Reltio">
+            <description>This connection will be used interact with Reltio APIs</description>
+            <tags/>
+            <agent/>
+            <attributes>
+               <attribute encrypted="false" name="baseURL" value="https://test.reltio.com"/>
+               <attribute encrypted="false" name="AuthServerURL" value="auth.reltio.com"/>
+               <attribute encrypted="false" name="username" value="integration.user"/>
+               <attribute encrypted="true" name="password" value=""/>
+               <attribute encrypted="false" name="grant_type" value="password"/>
+               <attribute encrypted="true" name="client_id" value=""/>
+               <attribute encrypted="false" name="tenantID" value="eW6FFLP30ff8i9P"/>
+            </attributes>
+            <businessConnector xmlns="http://schemas.informatica.com/appmodules/screenflow/2014/04/avosConnectors.xsd"
+                               agentOnly="false"
+                               connectorPath="project:/rt.connector/Reltio/Reltio_svcDef.xml"
+                               guid="9gGJkUhPrCxb1bbQmQYrsq"
+                               name="Reltio-1"
+                               supportsConnectionTest="false"
+                               uuid="17ebd54b-99ea-4ddf-8b4c-2dd69dd55c0a">
+               <description>This connector will be used to interact with Reltio REST APIs</description>
+            </businessConnector>
+         </connection>
+      </types1:Entry>
+      <types1:GUID>7qnsd5m1bdbfLeMNxlKKiQ</types1:GUID>
+      <types1:DisplayName>Reltio</types1:DisplayName>
+   </types1:Item>
+   <types1:CurrentServerDateTime>2020-12-06T20:44:05.159Z</types1:CurrentServerDateTime>
+</aetgt:getResponse>

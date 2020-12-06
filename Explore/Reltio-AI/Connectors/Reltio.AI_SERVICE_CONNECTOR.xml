@@ -1,0 +1,2393 @@
+<aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.com/appmodules/repository/2010/10/avrepository.xsd"
+                   xmlns:types1="http://schemas.active-endpoints.com/appmodules/repository/2010/10/avrepository.xsd">
+   <types1:Item>
+      <types1:EntryId>9sRGJZx1Xmgaabc-gt-26823737-2020-05-14T22:13:05.798Z::svc.xml</types1:EntryId>
+      <types1:Name>Reltio-1</types1:Name>
+      <types1:MimeType>application/xml+businesssconnector</types1:MimeType>
+      <types1:Description>This connector will be used to interact with Reltio REST APIs</types1:Description>
+      <types1:AppliesTo/>
+      <types1:Tags/>
+      <types1:VersionLabel>1.0</types1:VersionLabel>
+      <types1:State>CURRENT</types1:State>
+      <types1:ProcessGroup/>
+      <types1:CreatedBy>basav1@iics.com</types1:CreatedBy>
+      <types1:CreationDate>2020-05-14T22:13:06Z</types1:CreationDate>
+      <types1:ModifiedBy/>
+      <types1:PublicationStatus>unpublished</types1:PublicationStatus>
+      <types1:AutosaveExists>false</types1:AutosaveExists>
+      <types1:Entry>
+         <businessConnector xmlns="http://schemas.informatica.com/socrates/data-services/2014/05/business-connector-model.xsd"
+                            agentOnly="false"
+                            debug="false"
+                            displayName="Reltio"
+                            label=""
+                            name="Reltio-1"
+                            uuid="17ebd54b-99ea-4ddf-8b4c-2dd69dd55c0a">
+            <description>This connector will be used to interact with Reltio REST APIs</description>
+            <tags/>
+            <connectionAttributes xmlns="http://schemas.informatica.com/appmodules/screenflow/2014/04/avosConnectors.xsd">
+               <connectionAttribute description="Format: https://&lt;host_name&gt;"
+                                    masked="false"
+                                    name="baseURL"
+                                    required="true"
+                                    testWith="https://test.reltio.com"
+                                    type="string"/>
+               <connectionAttribute description="Authorization Server URL"
+                                    masked="false"
+                                    name="AuthServerURL"
+                                    required="true"
+                                    testWith="auth.reltio.com"
+                                    type="string"/>
+               <connectionAttribute description="A username of the end user registered in the Reltio database."
+                                    masked="false"
+                                    name="username"
+                                    required="true"
+                                    testWith="integration.user"
+                                    type="string"/>
+               <connectionAttribute description="A password of the end user registered in the Reltio database."
+                                    masked="true"
+                                    name="password"
+                                    required="true"
+                                    testWith=""
+                                    type="string"/>
+               <connectionAttribute description="Type of access token request. The value is: password"
+                                    masked="false"
+                                    name="grant_type"
+                                    required="true"
+                                    testWith="password"
+                                    type="string"/>
+               <connectionAttribute description="Client identification, provided by Reltio"
+                                    masked="true"
+                                    name="client_id"
+                                    required="true"
+                                    testWith=""
+                                    type="string"/>
+               <connectionAttribute description="Reltio Tenant ID"
+                                    masked="false"
+                                    name="tenantID"
+                                    required="true"
+                                    testWith="wJWznbR6vpI5WDT"
+                                    type="string"/>
+            </connectionAttributes>
+            <actions>
+               <action category=""
+                       failOnError="true"
+                       forSearch="false"
+                       isAbstract="true"
+                       label="GetBase"
+                       maxRedirects="100"
+                       name="GetBase"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description>Abstract Action for GET Operations</description>
+                  <input>
+                     <parameter description="The access token permits the customer to request protected information by calling other Reltio APIs"
+                                name="accessToken"
+                                nogen="true"
+                                required="true"
+                                testWith="c492620b-e095-4eb7-ae0b-e15f8f563c08"
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{let $uriParts := ($baseURL ,&#34;/reltio/api/&#34;, $tenantID )&#xA;return string-join($uriParts)}"
+                                        verb="GET">
+                        <httpHeaders>
+                           <header name="Authorization">bearer {$accessToken}</header>
+                        </httpHeaders>
+                     </restSimpleBinding>
+                  </binding>
+                  <output/>
+               </action>
+               <action category="Customer Entity"
+                       failOnError="true"
+                       forSearch="false"
+                       inherits="GetBase"
+                       label="GetEntity"
+                       maxRedirects="100"
+                       name="GetEntity"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description>Returns an entity object (full or partial) by URI from tenant. This operation returns an entity object (full or partial) by URI from the tenant.</description>
+                  <inheritanceMetadata>
+                     <section type="input">
+                        <section type="inputParameters">
+                           <attribute inherit="inherit" name="accessToken" type="parameter"/>
+                        </section>
+                     </section>
+                     <section type="output">
+                        <section type="outputFields"/>
+                     </section>
+                     <section type="restSimpleBinding">
+                        <attribute inherit="overwrite" name="url" type="url"/>
+                        <section type="httpHeaders">
+                           <attribute inherit="inherit" name="Authorization" type="header"/>
+                        </section>
+                        <section type="otherParams"/>
+                     </section>
+                  </inheritanceMetadata>
+                  <input>
+                     <parameter description="Comma-separated list of properties from entity structure that should be returned in a response. Allows you to return partial entity object"
+                                name="select"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter description="Returns an object as it was in the Reltio system at some point in time (timestamp in ms)."
+                                name="time"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="int"/>
+                     <parameter description="Comma-separated list of different options which affect entity's JSON content in the response. Available options:&#xA;sendHidden: disabled by default, the entity's JSON contains hidden attributes if this option is enabled.&#xA;ovOnly: return only attribute values that have the ov=true flag.&#xA;nonOvOnly: return only attribute values that have the ov=false flag. If you have a nested or reference attribute value, where ov=true, but sub-attributes, where ov=false, then these sub-attributes will not appear in the response."
+                                name="options"
+                                nogen="true"
+                                required="false"
+                                testWith="ovOnly"
+                                type="picklist">
+                        <options>
+                           <option name="values">[{"value":"sendHidden","label":"sendHidden"},{"value":"ovOnly","label":"ovOnly"},{"value":"nonOvOnly","label":"nonOvOnly"}]</option>
+                        </options>
+                     </parameter>
+                     <parameter description="Specify true to check that all crosswalks for the required entity are unique."
+                                name="mergeDuplicateCrosswalks"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="boolean"/>
+                     <parameter description="Specifies the maximum number of values listed in attributes. This restriction is intended for the UI convenience in cases where there are very long lists of values in some attributes."
+                                name="defaultMaxValues"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter description="Entity Id"
+                                name="entityId"
+                                nogen="true"
+                                required="true"
+                                testWith="1eElbx4l"
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding url="{let $uriParts := ($baseURL, &#34;/reltio/api/&#34;, $tenantID, &#34;/entities/&#34;, $entityId)&#xA;&#xA;(: Optional Query Parameters :)&#xA;let $selectParam := if(empty($select)) then () else concat('select=', fn:encode-for-uri($select))&#xA;let $timeParam := if(empty($time)) then () else concat('$time=', fn:encode-for-uri($time))&#xA;let $optionsParam := if(empty($options) ) then () else concat('options=', fn:encode-for-uri($options))&#xA;let $mergeDuplicateCrosswalksParam := if(empty($mergeDuplicateCrosswalks)) then () else concat('mergeDuplicateCrosswalks=', fn:encode-for-uri($mergeDuplicateCrosswalks))&#xA;let $defaultMaxValuesParam := if(empty($defaultMaxValues)) then () else concat('defaultMaxValues=', fn:encode-for-uri($defaultMaxValues))&#xA;&#xA;let $paramsArray:= ($selectParam, $timeParam, $optionsParam, $mergeDuplicateCrosswalksParam, $defaultMaxValuesParam)&#xA;&#xA;let $queryParams:= if( empty($paramsArray) ) then () else string-join($paramsArray,&#34;&amp;amp;&#34;)&#xA;&#xA;let $apiUrl := string-join($uriParts)&#xA;return if(empty($queryParams))&#xA;&#x9;then $apiUrl&#xA;    else concat($apiUrl, '?',$queryParams)}"
+                                        verb="GET"/>
+                  </binding>
+                  <output>
+                     <field description=""
+                            entireResponse="true"
+                            name="Entity"
+                            type="reference">
+                        <options>
+                           <option name="referenceTo">Entity</option>
+                        </options>
+                     </field>
+                  </output>
+               </action>
+               <action category="Auth"
+                       failOnError="true"
+                       forSearch="false"
+                       label="GetAccessToken"
+                       maxRedirects="100"
+                       name="GetAccessToken"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description>To get he access token which which is required to make Reltio API Calls</description>
+                  <input/>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="https://{$AuthServerURL}/oauth/token"
+                                        verb="GET">
+                        <otherParams>
+                           <otherParam name="username">{$username}</otherParam>
+                           <otherParam name="password">{$password}</otherParam>
+                           <otherParam name="grant_type">{$grant_type}</otherParam>
+                        </otherParams>
+                        <httpHeaders>
+                           <header name="Authorization">{concat("Basic ", $client_id )}</header>
+                        </httpHeaders>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description=""
+                            entireResponse="true"
+                            name="AuthResponse"
+                            type="reference">
+                        <options>
+                           <option name="referenceTo">AuthResponse</option>
+                        </options>
+                     </field>
+                  </output>
+               </action>
+               <action category="Customer Entity"
+                       failOnError="true"
+                       forSearch="false"
+                       inherits="GetBase"
+                       label="EntitySearch"
+                       maxRedirects="100"
+                       name="EntitySearch"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description>This operation performs search for entities by attribute values, tags, type, and roles</description>
+                  <inheritanceMetadata>
+                     <section type="input">
+                        <section type="inputParameters">
+                           <attribute inherit="inherit" name="accessToken" type="parameter"/>
+                        </section>
+                     </section>
+                     <section type="output">
+                        <section type="outputFields"/>
+                     </section>
+                     <section type="restSimpleBinding">
+                        <attribute inherit="overwrite" name="url" type="url"/>
+                        <section type="httpHeaders">
+                           <attribute inherit="inherit" name="Authorization" type="header"/>
+                        </section>
+                        <section type="otherParams"/>
+                     </section>
+                  </inheritanceMetadata>
+                  <input>
+                     <parameter description="Enables entities filtering by a condition. Format for filter query parameter: filter=({Condition Type}[AND/OR {Condition Type}]*)"
+                                name="filter"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter description="Comma-separated list of properties from entity structure that should be returned in a response. Allows you to return partial entity object. List of entity object properties you can find here-Entities"
+                                name="select"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter description="Positive Integer value to identify maximum number of entities to return in a response. Can be used to organize pagination in combination with the &#34;offset&#34; parameter. Default value is 50."
+                                name="max"
+                                nogen="true"
+                                required="false"
+                                testWith="2"
+                                type="int"/>
+                     <parameter description="Positive Integer value to identify starting what element in a result set should be returned in a response. Can be used to organize pagination in combination with the &#34;limit&#34; parameter. Default value is 0."
+                                name="offset"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="int"/>
+                     <parameter description="Entity objects property that should be used for sorting. Can be used in combination with the &#34;order&#34; parameter to have reverse order"
+                                name="sort"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter description="Order of sorting. Applicable only in combination with the &#34;sort&#34; parameter. Possible values:&#xA;asc: results are shown in ascending order.&#xA;desc: results are shown in descending order.&#xA;Default sorting is asc.&#xA;Example: order=desc"
+                                name="order"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter description="Comma-separated list of different options.Options[sendHidden, searchByOv, ovOnly, nonOvOnly]&#xA;Example: options=searchByOv"
+                                name="options"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter description="Specifies maximum number of values listed in attributes.&#xA;Example: defaultMaxValues=10"
+                                name="defaultMaxValues"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="int"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding url="{let $uriParts := ($baseURL ,&#34;/reltio/api/&#34;, $tenantID, &#34;/entities&#34; )&#xA;&#xA;(: Optional Query Parameters :)&#xA;let $filterParam := if(empty($filter)) then () else concat('filter=', fn:encode-for-uri($filter))&#xA;let $selectParam := if(empty($select)) then () else concat('select=', fn:encode-for-uri($select))&#xA;let $maxParam := if(empty($max)) then () else concat('max=', fn:encode-for-uri($max))&#xA;let $offsetParam := if(empty($offset)) then () else concat('offset=', fn:encode-for-uri($offset))&#xA;let $sortParam := if(empty($sort)) then () else concat('sort=', fn:encode-for-uri($sort))&#xA;let $orderParam := if(empty($order)) then () else concat('order=', fn:encode-for-uri($order))&#xA;let $optionsParam := if(empty($options) ) then () else concat('options=', fn:encode-for-uri($options))&#xA;let $defaultMaxValuesParam := if(empty($defaultMaxValues)) then () else concat('defaultMaxValues=', fn:encode-for-uri($defaultMaxValues))&#xA;&#xA;let $paramsArray:= ($filterParam, $selectParam, $maxParam, $offsetParam, $sortParam, $orderParam, $optionsParam,$defaultMaxValuesParam)&#xA;&#xA;let $queryParams:= if( empty($paramsArray) ) then () else string-join($paramsArray,&#34;&amp;amp;&#34;)&#xA;&#xA;let $apiUrl := string-join($uriParts)&#xA;return if(empty($queryParams))&#xA;&#x9;then $apiUrl&#xA;    else concat($apiUrl, '?',$queryParams)}"
+                                        verb="GET"/>
+                  </binding>
+                  <output>
+                     <field description="" name="EntityList" type="objectlist">
+                        <options>
+                           <option name="referenceTo">Entity</option>
+                        </options>
+                        <xquery>{let $payload := $RESTResponse/*:payload/text()
+let $entity_list := util:parseJSON($payload)
+return 
+for $item in $entity_list
+return
+&lt;Entity&gt;
+ {$item/*}
+&lt;/Entity&gt;}</xquery>
+                     </field>
+                     <field description="" name="RecordsFound" type="int">
+                        <xquery>{count($EntityList)}</xquery>
+                     </field>
+                  </output>
+               </action>
+               <action category=""
+                       failOnError="true"
+                       forSearch="false"
+                       isAbstract="true"
+                       label="PostBase"
+                       maxRedirects="100"
+                       name="PostBase"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description>Abstract Action for POST Operations</description>
+                  <input>
+                     <parameter description="The access token permits the customer to request protected information by calling other Reltio APIs"
+                                name="accessToken"
+                                nogen="true"
+                                required="false"
+                                testWith="15b6052b-57c9-4bcf-9b62-f1f801609f6a"
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{{let $uriParts := ($baseURL ,&#34;/reltio/api/&#34;, $tenantID )&#xA;return string-join($uriParts)}}"
+                                        verb="POST">
+                        <httpHeaders>
+                           <header name="Authorization">bearer {$accessToken}</header>
+                        </httpHeaders>
+                        <body generateUsing="JSON" preserveJsonStringFormatting="true"/>
+                     </restSimpleBinding>
+                  </binding>
+                  <output/>
+               </action>
+               <action category="Customer Entity"
+                       failOnError="true"
+                       forSearch="false"
+                       inherits="PostBase"
+                       label="CreateEntity"
+                       maxRedirects="100"
+                       name="CreateEntity"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description>This will be used to create an entity in Reltio</description>
+                  <inheritanceMetadata>
+                     <section type="input">
+                        <section type="inputParameters">
+                           <attribute inherit="inherit" name="accessToken" type="parameter"/>
+                        </section>
+                     </section>
+                     <section type="output">
+                        <section type="outputFields"/>
+                     </section>
+                     <section type="restSimpleBinding">
+                        <attribute inherit="overwrite" name="url" type="url"/>
+                        <section type="body">
+                           <attribute inherit="overwrite" name="generateUsing" type="generateUsing"/>
+                        </section>
+                        <section type="httpHeaders">
+                           <attribute inherit="inherit" name="Authorization" type="header"/>
+                        </section>
+                        <section type="otherParams"/>
+                     </section>
+                  </inheritanceMetadata>
+                  <input>
+                     <parameter name="Entity"
+                                nogen="true"
+                                required="false"
+                                testWith="&lt;Entity&gt;&#xA;&#x9;&lt;attributes&gt;&#xA;&#x9;&#x9;&lt;PreferredName&gt;David&lt;/PreferredName&gt;&#xA;&#x9;&#x9;&lt;Title&gt;Mr&lt;/Title&gt;&#xA;&#x9;&#x9;&lt;Prefix/&gt;&#xA;&#x9;&#x9;&lt;SuffixName/&gt;&#xA;&#x9;&#x9;&lt;FirstName&gt;David&lt;/FirstName&gt;&#xA;&#x9;&#x9;&lt;AlternateFirstNamet&gt;Dave&lt;/AlternateFirstNamet&gt;&#xA;&#x9;&#x9;&lt;MiddleName&gt;No&lt;/MiddleName&gt;&#xA;&#x9;&#x9;&lt;AlternateMiddleName&gt;No&lt;/AlternateMiddleName&gt;&#xA;&#x9;&#x9;&lt;LastName&gt;Boon&lt;/LastName&gt;&#xA;&#x9;&#x9;&lt;AlternateLastName&gt;Boon&lt;/AlternateLastName&gt;&#xA;&#x9;&#x9;&lt;MacPortalIDSUserID&gt;258963&lt;/MacPortalIDSUserID&gt;&#xA;&#x9;&#x9;&lt;ServicingPortalIDSUserID&gt;1258741&lt;/ServicingPortalIDSUserID&gt;&#xA;&#x9;&#x9;&lt;Gender&gt;Male&lt;/Gender&gt;&#xA;&#x9;&#x9;&lt;DriverLicense&gt;AXSW12SE&lt;/DriverLicense&gt;&#xA;&#x9;&#x9;&lt;MaskedDriverLicense&gt;ASEWQ&lt;/MaskedDriverLicense&gt;&#xA;&#x9;&#x9;&lt;DoB&gt;1977-12-10&lt;/DoB&gt;&#xA;&#x9;&#x9;&lt;BirthCity&gt;Exton&lt;/BirthCity&gt;&#xA;&#x9;&#x9;&lt;BirthState&gt;PA&lt;/BirthState&gt;&#xA;&#x9;&#x9;&lt;BirthCountry&gt;USA&lt;/BirthCountry&gt;&#xA;&#x9;&#x9;&lt;EmployeeFlag&gt;true&lt;/EmployeeFlag&gt;&#xA;&#x9;&#x9;&lt;CustomerType&gt;Non Port&lt;/CustomerType&gt;&#xA;&#x9;&#x9;&lt;CustomerSubType&gt;Borrower&lt;/CustomerSubType&gt;&#xA;&#x9;&#x9;&lt;VeteranFlag&gt;true&lt;/VeteranFlag&gt;&#xA;&#x9;&#x9;&lt;BranchofService&gt;Air Force&lt;/BranchofService&gt;&#xA;&#x9;&#x9;&lt;ServiceStatus&gt;Active&lt;/ServiceStatus&gt;&#xA;&#x9;&#x9;&lt;MaritalStatus&gt;Married&lt;/MaritalStatus&gt;&#xA;&#x9;&#x9;&lt;CustomerCreateDate&gt;2019-05-02&lt;/CustomerCreateDate&gt;&#xA;&#x9;&#x9;&lt;CustomerStatus&gt;Active&lt;/CustomerStatus&gt;&#xA;&#x9;&#x9;&lt;CustomerDeceasedFlag&gt;false&lt;/CustomerDeceasedFlag&gt;&#xA;&#x9;&#x9;&lt;MacPortalLastLogInDate&gt;2019-09-01T00:00:00Z&lt;/MacPortalLastLogInDate&gt;&#xA;&#x9;&#x9;&lt;LastCustomerWebsiteAccess&gt;2019-02-08T00:00:00Z&lt;/LastCustomerWebsiteAccess&gt;&#xA;&#x9;&#x9;&lt;Ethnicity&gt;American&lt;/Ethnicity&gt;&#xA;&#x9;&#x9;&lt;LanguagePreference&gt;English&lt;/LanguagePreference&gt;&#xA;&#x9;&#x9;&lt;IncomeBand&gt;50000&lt;/IncomeBand&gt;&#xA;&#x9;&#x9;&lt;DomesticHouseholdIncome&gt;50000&lt;/DomesticHouseholdIncome&gt;&#xA;&#x9;&#x9;&lt;CurrencyType&gt;USD&lt;/CurrencyType&gt;&#xA;&#x9;&#x9;&lt;HouseholdSize&gt;3&lt;/HouseholdSize&gt;&#xA;&#x9;&#x9;&lt;HasDependentsFlag&gt;true&lt;/HasDependentsFlag&gt;&#xA;&#x9;&#x9;&lt;OccupationType&gt;Manager&lt;/OccupationType&gt;&#xA;&#x9;&#x9;&lt;ParentsFlag&gt;Y&lt;/ParentsFlag&gt;&#xA;&#x9;&#x9;&lt;OccupationJobTitle&gt;Saleried&lt;/OccupationJobTitle&gt;&#xA;&#x9;&#x9;&lt;MonthlyGrossIncome&gt;15100&lt;/MonthlyGrossIncome&gt;&#xA;&#x9;&#x9;&lt;PrimaryLanguageCode&gt;10&lt;/PrimaryLanguageCode&gt;&#xA;&#x9;&#x9;&lt;PropertyIdFromSource&gt;10&lt;/PropertyIdFromSource&gt;&#xA;&#x9;&#x9;&lt;SSN&gt;485529898&lt;/SSN&gt;&#xA;&#x9;&#x9;&lt;SSNLast4&gt;9898&lt;/SSNLast4&gt;&#xA;&#x9;&#x9;&lt;LatestFICO&gt;800&lt;/LatestFICO&gt;&#xA;&#x9;&#x9;&lt;EncompassMilestone&gt;1111&lt;/EncompassMilestone&gt;&#xA;&#x9;&#x9;&lt;Loan&gt;1234789&lt;/Loan&gt;&#xA;&#x9;&#x9;&lt;Education&gt;&#xA;&#x9;&#x9;&#x9;&lt;SchoolName&gt;Penn State University&lt;/SchoolName&gt;&#xA;&#x9;&#x9;&#x9;&lt;Type&gt;Oswego High School&lt;/Type&gt;&#xA;&#x9;&#x9;&#x9;&lt;Degree&gt;Oswego High School&lt;/Degree&gt;&#xA;&#x9;&#x9;&#x9;&lt;StartYear&gt;2007&lt;/StartYear&gt;&#xA;&#x9;&#x9;&#x9;&lt;EndYear&gt;2011&lt;/EndYear&gt;&#xA;&#x9;&#x9;&#x9;&lt;Level&gt;Bachelors&lt;/Level&gt;&#xA;&#x9;&#x9;&lt;/Education&gt;&#xA;&#x9;&#x9;&lt;Addresses&gt;&#xA;&#x9;&#x9;&#x9;&lt;AddressType&gt;Billing&lt;/AddressType&gt;&#xA;&#x9;&#x9;&#x9;&lt;Country&gt;USA&lt;/Country&gt;&#xA;&#x9;&#x9;&#x9;&lt;Apartment&gt;101&lt;/Apartment&gt;&#xA;&#x9;&#x9;&#x9;&lt;Building&gt;112&lt;/Building&gt;&#xA;&#x9;&#x9;&#x9;&lt;AddressLine1&gt;10 Main Street&lt;/AddressLine1&gt;&#xA;&#x9;&#x9;&#x9;&lt;City&gt;Chicago&lt;/City&gt;&#xA;&#x9;&#x9;&#x9;&lt;StateProvince&gt;IL&lt;/StateProvince&gt;&#xA;&#x9;&#x9;&lt;/Addresses&gt;&#xA;&#x9;&#x9;&lt;Phone&gt;&#xA;&#x9;&#x9;&#x9;&lt;GeoCountry&gt;USA&lt;/GeoCountry&gt;&#xA;&#x9;&#x9;&#x9;&lt;Number&gt;4044044044&lt;/Number&gt;&#xA;&#x9;&#x9;&#x9;&lt;Type&gt;Home&lt;/Type&gt;&#xA;&#x9;&#x9;&#x9;&lt;CountryCode&gt;1&lt;/CountryCode&gt;&#xA;&#x9;&#x9;&lt;/Phone&gt;&#xA;&#x9;&#x9;&lt;Email&gt;&#xA;&#x9;&#x9;&#x9;&lt;Country&gt;USA&lt;/Country&gt;&#xA;&#x9;&#x9;&#x9;&lt;Email&gt;dboon@disney.com&lt;/Email&gt;&#xA;&#x9;&#x9;&#x9;&lt;Type&gt;Primary&lt;/Type&gt;&#xA;&#x9;&#x9;&lt;/Email&gt;&#xA;&#x9;&#x9;&lt;ContactPreferences&gt;&#xA;&#x9;&#x9;&#x9;&lt;ContactPreference&gt;No Solicit - All&lt;/ContactPreference&gt;&#xA;&#x9;&#x9;&lt;/ContactPreferences&gt;&#xA;&#x9;&#x9;&lt;SourceSystemDetails&gt;&#xA;&#x9;&#x9;&#x9;&lt;SourceSystemCode&gt;MDM&lt;/SourceSystemCode&gt;&#xA;&#x9;&#x9;&#x9;&lt;SourceSystemType&gt;Mastering Data&lt;/SourceSystemType&gt;               &#xA;&#x9;&#x9;&lt;/SourceSystemDetails&gt;&#xA;&#x9;&#x9;&lt;MultiChannelCommunicationConsent&gt;&#xA;&#x9;&#x9;&lt;ChannelType&gt;Phone&lt;/ChannelType&gt;&#xA;&#x9;&#x9;&lt;ChannelValue&gt;9898989898&lt;/ChannelValue&gt;&#xA;&#x9;&#x9;&lt;CurrentOptStatus&gt;Opt-In&lt;/CurrentOptStatus&gt;&#xA;&#x9;&#x9;&lt;StartDate&gt;2020-02-06&lt;/StartDate&gt;&#xA;&#x9;&#x9;&lt;/MultiChannelCommunicationConsent&gt;&#xA;&#x9;&#x9;&lt;MultiChannelCommunicationConsent&gt;&#xA;&#x9;&#x9;&lt;ChannelType&gt;Email&lt;/ChannelType&gt;&#xA;&#x9;&#x9;&lt;ChannelValue&gt;test@abcd.com&lt;/ChannelValue&gt;&#xA;&#x9;&#x9;&lt;CurrentOptStatus&gt;Opt-In&lt;/CurrentOptStatus&gt;&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;&lt;/MultiChannelCommunicationConsent&gt;&#xA;&#x9;&lt;/attributes&gt;&#xA;&#x9;&lt;crosswalks&gt;&#xA;&#x9;&#x9;&lt;type&gt;configuration/sources/Test_Source&lt;/type&gt;&#xA;&#x9;&#x9;&lt;value&gt;123456&lt;/value&gt;&#xA;&#x9;&lt;/crosswalks&gt;&#x9;&#xA;&#x9;&lt;crosswalks&gt;&#xA;&#x9;&#x9;&lt;type&gt;configuration/sources/SFDC_Account&lt;/type&gt;&#xA;&#x9;&#x9;&lt;value&gt;78910&lt;/value&gt;&#xA;&#x9;&lt;/crosswalks&gt;&#xA;&lt;/Entity&gt;"
+                                type="reference">
+                        <options>
+                           <option name="referenceTo">Entity</option>
+                        </options>
+                     </parameter>
+                  </input>
+                  <binding>
+                     <restSimpleBinding url="{let $uriParts := ($baseURL ,&#34;/reltio/api/&#34;, $tenantID,&#34;/entities&#34;)&#xA;return string-join($uriParts)}"
+                                        verb="POST">
+                        <httpHeaders>
+                           <header name="Content-Type">application/json</header>
+                        </httpHeaders>
+                        <body>[
+{{
+	"type": "configuration/entityTypes/Individual",    
+    { if(exists($Entity/crosswalks) and string-length($Entity/crosswalks[1]/type)&gt; 0)
+		then ( 
+        let $crossWalksData:= for $record in $Entity/crosswalks
+        return concat('{"type":"',$record/type/text(),'", "value":"',$record/value,'"}' ) 
+        return concat('"crosswalks": [', string-join($crossWalksData,","), '],')
+        )        
+        else () }    
+	"attributes": {{
+		"PreferredName": [{{
+				"value": "{$Entity/attributes/PreferredName/text()}"
+			}}
+		],
+		"Title": [{{
+				"value": "{$Entity/attributes/Title/text()}"
+			}}
+		],
+		"Prefix": [{{
+				"value": "{$Entity/attributes/Prefix/text()}"
+			}}
+		],
+		"SuffixName": [{{
+				"value": "{$Entity/attributes/SuffixName/text()}"
+			}}
+		],
+		"FirstName": [{{
+				"value": "{$Entity/attributes/FirstName/text()}"
+			}}
+		],
+		"AlternateFirstName": [{{
+				"value": "{$Entity/attributes/AlternateFirstName/text()}"
+			}}
+		],
+		"MiddleName": [{{
+				"value": "{$Entity/attributes/MiddleName/text()}"
+			}}
+		],
+		"AlternateMiddleName": [{{
+				"value": "{$Entity/attributes/AlternateMiddleName/text()}"
+			}}
+		],
+		"LastName": [{{
+				"value": "{$Entity/attributes/LastName/text()}"
+			}}
+		],
+		"AlternateLastName": [{{
+				"value": "{$Entity/attributes/AlternateLastName/text()}"
+			}}
+		],
+		"MacPortalIDSUserID": [{{
+				"value": "{$Entity/attributes/MacPortalIDSUserID/text()}"
+			}}
+		],
+		"ServicingPortalIDSUserID": [{{
+				"value": "{$Entity/attributes/ServicingPortalIDSUserID/text()}"
+			}}
+		],
+		"Gender": [{{
+				"value": "{$Entity/attributes/Gender/text()}"
+			}}
+		],
+		"DriverLicense": [{{
+				"value": "{$Entity/attributes/DriverLicense/text()}"
+			}}
+		],
+		"MaskedDriverLicense": [{{
+				"value": "{$Entity/attributes/MaskedDriverLicense/text()}"
+			}}
+		],
+		{if(exists($Entity/attributes/DoB) and string-length($Entity/attributes/DoB)&gt; 0)
+        then concat('"DoB": [{"value":"',$Entity/attributes/DoB/text(),'"}],')
+        else ()        
+        }
+		"BirthCity": [{{
+				"value": "{$Entity/attributes/BirthCity/text()}"
+			}}
+		],
+		"BirthState": [{{
+				"value": "{$Entity/attributes/BirthState/text()}"
+			}}
+		],
+		"BirthCountry": [{{
+				"value": "{$Entity/attributes/BirthCountry/text()}"
+			}}
+		],
+		"EmployeeFlag": [{{
+				"value": "{$Entity/attributes/EmployeeFlag/text()}"
+			}}
+		],
+		"CustomerType": [{{
+				"value": "{$Entity/attributes/CustomerType/text()}"
+			}}
+		],
+		"CustomerSubType": [{{
+				"value": "{$Entity/attributes/CustomerSubType/text()}"
+			}}
+		],
+		"VeteranFlag": [{{
+				"value": "{$Entity/attributes/VeteranFlag/text()}"
+			}}
+		],
+		"BranchofService": [{{
+				"value": "{$Entity/attributes/BranchofService/text()}"
+			}}
+		],
+		"ServiceStatus": [{{
+				"value": "{$Entity/attributes/ServiceStatus/text()}"
+			}}
+		],
+		"MaritalStatus": [{{
+				"value": "{$Entity/attributes/MaritalStatus/text()}"
+			}}
+		],
+		{if(exists($Entity/attributes/CustomerCreateDate) and string-length($Entity/attributes/CustomerCreateDate)&gt; 0)
+        then concat('"CustomerCreateDate": [{"value":"',$Entity/attributes/CustomerCreateDate/text(),'"}],')
+        else ()        
+        }
+		"CustomerStatus": [{{
+				"value": "{$Entity/attributes/CustomerStatus/text()}"
+			}}
+		],
+		"CustomerDeceasedFlag": [{{
+				"value": "{$Entity/attributes/CustomerDeceasedFlag/text()}"
+			}}
+		],
+		{if(exists($Entity/attributes/MacportalLastLoginDate) and string-length($Entity/attributes/MacportalLastLoginDate)&gt; 0)
+        then concat('"MacportalLastLoginDate": [{"value":"',$Entity/attributes/MacportalLastLoginDate/text(),'"}],')
+        else ()        
+        }				
+		{if(exists($Entity/attributes/LastCustomerWebsiteAccess) and string-length($Entity/attributes/LastCustomerWebsiteAccess)&gt; 0)
+        then concat('"LastCustomerWebsiteAccess": [{"value":"',$Entity/attributes/LastCustomerWebsiteAccess/text(),'"}],')
+        else ()        
+        }
+		"Ethnicity": [{{
+				"value": "{$Entity/attributes/Ethnicity/text()}"
+			}}
+		],
+		"LanguagePreference": [{{
+				"value": "{$Entity/attributes/LanguagePreference/text()}"
+			}}
+		],
+		"Education": [{{
+				"value": {{
+					"SchoolName": {{
+						"value": "{$Entity/attributes/Education/SchoolName/text()}"
+					}},
+					"Type": {{
+						"value": "{$Entity/attributes/Education/Type/text()}"
+					}},
+					"Degree": {{
+						"value": "{$Entity/attributes/Education/Degree/text()}"
+					}},							
+					
+					{if(exists($Entity/attributes/Education/StartYear) and string-length($Entity/attributes/Education/StartYear)&gt; 0)
+					then concat('"StartYear": [{"value":"',$Entity/attributes/Education/StartYear/text(),'"}],')
+					else ()        
+					}
+					
+					{if(exists($Entity/attributes/Education/EndYear) and string-length($Entity/attributes/Education/EndYear)&gt; 0)
+					then concat('"EndYear": [{"value":"',$Entity/attributes/Education/EndYear/text(),'"}],')
+					else ()        
+					}
+					"Level": {{
+						"value": "{$Entity/attributes/Education/Level/text()}"
+					}}
+
+				}}
+			}}
+		],
+		
+		{if(exists($Entity/attributes/IncomeBand) and string-length($Entity/attributes/IncomeBand)&gt; 0)
+        then concat('"IncomeBand": [{"value":"',$Entity/attributes/IncomeBand/text(),'"}],')
+        else ()        
+        }
+		
+		{if(exists($Entity/attributes/DomesticHouseholdIncome) and string-length($Entity/attributes/DomesticHouseholdIncome)&gt; 0)
+        then concat('"DomesticHouseholdIncome": [{"value":"',$Entity/attributes/DomesticHouseholdIncome/text(),'"}],')
+        else ()        
+        }
+		
+		"CurrencyType": [{{
+				"value": "{$Entity/attributes/CurrencyType/text()}"
+			}}
+		],
+		{if(exists($Entity/attributes/HouseholdSize) and string-length($Entity/attributes/HouseholdSize)&gt; 0)
+        then concat('"HouseholdSize": [{"value":"',$Entity/attributes/HouseholdSize/text(),'"}],')
+        else ()        
+        }
+		"HasDependentsFlag": [{{
+				"value": "{$Entity/attributes/HasDependentsFlag/text()}"
+			}}
+		],
+		"OccupationType": [{{
+				"value": "{$Entity/attributes/OccupationType/text()}"
+			}}
+		],
+		"ParentsFlag": [{{
+				"value": "{$Entity/attributes/ParentsFlag/text()}"
+			}}
+		],
+		"OccupationJobTitle": [{{
+				"value": "{$Entity/attributes/OccupationJobTitle/text()}"
+			}}
+		],
+		
+		{if(exists($Entity/attributes/MonthlyGrossIncome) and string-length($Entity/attributes/MonthlyGrossIncome)&gt; 0)
+        then concat('"MonthlyGrossIncome": [{"value":"',$Entity/attributes/MonthlyGrossIncome/text(),'"}],')
+        else ()        
+        }
+		
+		"PrimaryLanguageCode": [{{
+				"value": "{$Entity/attributes/PrimaryLanguageCode/text()}"
+			}}
+		],
+		"Addresses": [{{
+				"value": {{
+					"AddressType": [{{
+							"value": "{$Entity/attributes/Addresses/AddressType/text()}"
+						}}
+					],
+					"Country": {{
+						"value": "{$Entity/attributes/Addresses/Country/text()}"
+					}},
+					
+					{if(exists($Entity/attributes/Addresses/Building) and string-length($Entity/attributes/Addresses/Building)&gt; 0)
+					then concat('"Building": [{"value":"',$Entity/attributes/Addresses/Building/text(),'"}],')
+					else ()        
+					}
+					
+					{if(exists($Entity/attributes/Addresses/Apartment) and string-length($Entity/attributes/Addresses/Apartment)&gt; 0)
+					then concat('"Apartment": [{"value":"',$Entity/attributes/Addresses/Apartment/text(),'"}],')
+					else ()        
+					}					
+					
+					"AddressLine1": {{
+						"value": "{$Entity/attributes/Addresses/AddressLine1/text()}"
+					}},
+					"AddressLine2": {{
+						"value": "{$Entity/attributes/Addresses/AddressLine2/text()}"
+					}},
+					"AddressLine3": {{
+						"value": "{$Entity/attributes/Addresses/AddressLine3/text()}"
+					}},
+					"AddressLine4": {{
+						"value": "{$Entity/attributes/Addresses/AddressLine4/text()}"
+					}},
+					"City": {{
+						"value": "{$Entity/attributes/Addresses/City/text()}"
+					}},
+					
+					{if(exists($Entity/attributes/Addresses/Zip5) and string-length($Entity/attributes/Addresses/Zip5)&gt; 0)
+					then concat('"Zip5": [{"value":"',$Entity/attributes/Addresses/Zip5/text(),'"}],')
+					else ()        
+					}
+					{if(exists($Entity/attributes/Addresses/Zip4) and string-length($Entity/attributes/Addresses/Zip4)&gt; 0)
+					then concat('"Zip4": [{"value":"',$Entity/attributes/Addresses/Zip4/text(),'"}],')
+					else ()        
+					}
+					
+					"County": {{
+						"value": "{$Entity/attributes/Addresses/County/text()}"
+					}},
+					"StateProvince": {{
+						"value": "{$Entity/attributes/Addresses/StateProvince/text()}"
+					}}
+					
+				}}
+			}}
+		],
+		{ if(exists($Entity/attributes/Phone) and string-length($Entity/attributes/Phone[1]/Number)&gt; 0)
+		then ( 
+        let $phnData:= for $record in $Entity/attributes/Phone
+        return concat('{ "value": {', '"Number":{ "value":"',$record/Number,'"},', '"CountryCode":{ "value":"',$record/CountryCode,'"},', '"Type":{ "value":"',$record/Type,'"},','"Extension":{ "value":"',$record/Extension,'"}','}}')
+        return concat('"Phone": [', string-join($phnData,","), '],')
+        )        
+        else ()        
+        }
+		"Email": [{{
+				"value": {{					
+					"Email": {{
+						"value": "{$Entity/attributes/Email/Email/text()}"
+					}},
+					"Type": {{
+						"value": "{$Entity/attributes/Email/Type/text()}"
+					}}
+				}}
+			}}
+		],
+		"ContactPreferences": [{{
+				"value": {{	
+					{if(exists($Entity/attributes/ContactPreferences/LastUpdatedDate) and string-length($Entity/attributes/ContactPreferences/LastUpdatedDate/text()) &gt; 0)
+					then concat('"LastUpdatedDate": [{"value":"',$Entity/attributes/ContactPreferences/LastUpdatedDate/text(),'"}],')
+					else ()        
+					}					
+					"ContactPreference": {{
+						"value": "{$Entity/attributes/ContactPreferences/ContactPreference/text()}"
+					}}					
+				}}
+			}}
+		],
+		{if(exists($Entity/attributes/MultiChannelCommunicationConsent) )
+		then ( 
+        let $phnData:= for $record in $Entity/attributes/MultiChannelCommunicationConsent
+        let $StartDate:= if(exists($record/StartDate) and string-length($record/StartDate)&gt; 0) then concat('"StartDate":{ "value":"',$record/StartDate,'"}') else ()
+        let $ChannelType:= concat('"ChannelType":{ "value":"',$record/ChannelType,'"}') 
+        let $ChannelValue:= concat('"ChannelValue":{ "value":"',$record/ChannelValue,'"}') 
+        let $CurrentOptStatus:= concat('"CurrentOptStatus":{ "value":"',$record/CurrentOptStatus,'"}') 
+        return concat('{ "value": {',string-join(($ChannelType, $CurrentOptStatus, $ChannelValue, $StartDate),','), '}}')
+        
+		return concat('"MultiChannelCommunicationConsent": [', string-join($phnData,","), '],')
+        )        
+        else () } 
+		"PropertyIdfromSource": [{{
+				"value": "{$Entity/attributes/PropertyIdfromSource/text()}"
+			}}
+		],
+		"SSN": [{{
+				"value": "{$Entity/attributes/SSN/text()}"
+			}}
+		],
+		"SSNLast4": [{{
+				"value": "{$Entity/attributes/SSNLast4/text()}"
+			}}
+		],
+		
+		{if(exists($Entity/attributes/BorrowerPosition) and string-length($Entity/attributes/BorrowerPosition)&gt; 0)
+        then concat('"BorrowerPosition": [{"value":"',$Entity/attributes/BorrowerPosition/text(),'"}],')
+        else ()        
+        }
+		
+		{if(exists($Entity/attributes/LatestFICO) and string-length($Entity/attributes/LatestFICO)&gt; 0)
+        then concat('"LatestFICO": [{"value":"',$Entity/attributes/LatestFICO/text(),'"}],')
+        else ()        
+        }
+		
+		"SourceSystemDetails": [{{
+				"value": {{
+					"SourceSystemCode": {{
+						"value": "{$Entity/attributes/SourceSystemDetails/SourceSystemCode/text()}"
+					}},
+					"SourceSystemType": {{
+						"value": "{$Entity/attributes/SourceSystemDetails/SourceSystemType/text()}"
+					}},
+					"SourceSystemName": {{
+						"value": "{$Entity/attributes/SourceSystemDetails/SourceSystemName/text()}"
+					}},
+					"SourceSystemPennyMacIdentifier": {{
+						"value": "{$Entity/attributes/SourceSystemDetails/SourceSystemPennyMacIdentifier/text()}"
+					}},
+					"SourceSystemCustomerIdentifier": {{
+						"value": "{$Entity/attributes/SourceSystemDetails/SourceSystemCustomerIdentifier/text()}"
+					}},						
+					{if(exists($Entity/attributes/SourceSystemDetails/SourceSystemCustomerLUD) and string-length($Entity/attributes/SourceSystemDetails/SourceSystemCustomerLUD)&gt; 0)
+					then concat('"SourceSystemCustomerLUD": [{"value":"',$Entity/attributes/SourceSystemDetails/SourceSystemCustomerLUD/text(),'"}],')
+					else ()        
+					}					
+					{if(exists($Entity/attributes/SourceSystemDetails/SourceSystemCustomerCreateDate) and string-length($Entity/attributes/SourceSystemDetails/SourceSystemCustomerCreateDate)&gt; 0)
+					then concat('"SourceSystemCustomerCreateDate": [{"value":"',$Entity/attributes/SourceSystemDetails/SourceSystemCustomerCreateDate/text(),'"}],')
+					else ()        
+					}		
+					"SourceSystemEffectiveCustomerID": {{
+						"value": "{$Entity/attributes/SourceSystemDetails/SourceSystemEffectiveCustomerID/text()}"
+					}}
+				}}
+			}}
+		]
+	}}
+}}
+]</body>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description="" name="CreateEntityResponse" type="reference">
+                        <options>
+                           <option name="referenceTo">CreateEntityResponse</option>
+                        </options>
+                        <xquery>{let $entity_list := util:parseJSON($RESTResponse/*:payload/text())
+let $EntityResponse:= for $item in $entity_list
+return
+&lt;Entity&gt;
+ {$item/*}
+&lt;/Entity&gt;
+
+return 
+&lt;CreateEntityResponse&gt;
+   &lt;ReltioId&gt;{ fn:substring-after($EntityResponse[1]/object/uri, 'entities/') }&lt;/ReltioId&gt;   
+   &lt;Successful&gt;{ if( exists($EntityResponse[1]/object/uri) ) then true() else false() }&lt;/Successful&gt; 
+&lt;/CreateEntityResponse&gt;}</xquery>
+                     </field>
+                     <field description="" name="Errors" type="reference">
+                        <options>
+                           <option name="referenceTo">errors</option>
+                        </options>
+                        <xquery>{let $payload := $RESTResponse/*:payload/text()
+let $entity_list := util:parseJSON($payload)
+return 
+for $item in $entity_list
+return $item/errors}</xquery>
+                     </field>
+                  </output>
+               </action>
+               <action category="Customer Entity"
+                       failOnError="true"
+                       forSearch="false"
+                       inherits="PostBase"
+                       label="UpdateEntity"
+                       maxRedirects="100"
+                       name="UpdateEntity"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description>This action will be used to update Contact Preference and Multi Chanel Consent</description>
+                  <inheritanceMetadata>
+                     <section type="input">
+                        <section type="inputParameters">
+                           <attribute inherit="inherit" name="accessToken" type="parameter"/>
+                        </section>
+                     </section>
+                     <section type="output">
+                        <section type="outputFields"/>
+                     </section>
+                     <section type="restSimpleBinding">
+                        <attribute inherit="overwrite" name="url" type="url"/>
+                        <section type="body">
+                           <attribute inherit="overwrite" name="generateUsing" type="generateUsing"/>
+                        </section>
+                        <section type="httpHeaders">
+                           <attribute inherit="inherit" name="Authorization" type="header"/>
+                        </section>
+                        <section type="otherParams"/>
+                     </section>
+                  </inheritanceMetadata>
+                  <input>
+                     <parameter name="EntityId"
+                                nogen="true"
+                                required="true"
+                                testWith="19NLFfTe"
+                                type="string"/>
+                     <parameter name="ContactPreferences"
+                                nogen="true"
+                                required="false"
+                                testWith="&lt;ContactPreferences&gt;&#xA;            &lt;ContactPreference&gt;Contractual DNS&lt;/ContactPreference&gt;&#xA;            &lt;Uri&gt;entities/19NLFfTe/attributes/ContactPreferences/2qHYs7B98&lt;/Uri&gt;&#xA;            &lt;Operation&gt;UPDATE_ATTRIBUTE&lt;/Operation&gt;&#xA;         &lt;/ContactPreferences&gt;"
+                                type="reference">
+                        <options>
+                           <option name="referenceTo">ContactPreferences</option>
+                        </options>
+                     </parameter>
+                     <parameter name="EmailConsent"
+                                nogen="true"
+                                required="false"
+                                testWith="&lt;ChannelValue&gt;Contractual DNS&lt;/ChannelValue&gt;&#xA;            &lt;Uri&gt;entities/19NLFfTe/attributes/MultiChannelCommunicationConsent/2qHYs7Jfe&lt;/Uri&gt;&#xA;            &lt;Operation&gt;UPDATE_ATTRIBUTE&lt;/Operation&gt;&#xA;            &lt;StartDate/&gt;&#xA;         &lt;/MultiChannelCommunicationConsent&gt;"
+                                type="reference">
+                        <options>
+                           <option name="referenceTo">MultiChannelCommunicationConsent</option>
+                        </options>
+                     </parameter>
+                     <parameter name="PhoneConsent"
+                                nogen="true"
+                                required="false"
+                                testWith="&lt;MultiChannelCommunicationConsent&gt;&#xA;            &lt;ChannelValue&gt;Contractual DNS&lt;/ChannelValue&gt;&#xA;            &lt;Uri&gt;entities/19NLFfTe/attributes/MultiChannelCommunicationConsent/2qHYs7eyw&lt;/Uri&gt;&#xA;            &lt;Operation&gt;UPDATE_ATTRIBUTE&lt;/Operation&gt;&#xA;            &lt;StartDate/&gt;&#xA;         &lt;/MultiChannelCommunicationConsent&gt;"
+                                type="reference">
+                        <options>
+                           <option name="referenceTo">MultiChannelCommunicationConsent</option>
+                        </options>
+                     </parameter>
+                  </input>
+                  <binding>
+                     <restSimpleBinding url="{let $uriParts := ($baseURL ,&#34;/reltio/api/&#34;, $tenantID, &#34;/entities/&#34;, $EntityId, &#34;/_update&#34;)&#xA;return string-join($uriParts)}"
+                                        verb="POST">
+                        <httpHeaders>
+                           <header name="Content-Type">application/json</header>
+                        </httpHeaders>
+                        <body>[
+  {{
+    "type": "{ $ContactPreferences/Operation/text()}",
+    "uri": "{$ContactPreferences/Uri/text()}",
+    "newValue":[
+    {{
+				"value": {{                   
+					"ContactPreference": {{
+						"value": "{$ContactPreferences/ContactPreference/text()}"
+					}}
+				}}
+    }}
+	]   	
+  }}, 
+  {{
+    "type": "{ $EmailConsent/Operation/text()}",
+    "uri": "{$EmailConsent/Uri/text()}",
+    "newValue":[
+    {{
+				"value":{{
+					"ChannelType": {{										
+						"value": "Email"
+					}},
+					"ChannelValue": {{
+						"value": "{$EmailConsent/ChannelValue/text()}"
+					}},
+                    {if(exists($EmailConsent/StartDate) and string-length($EmailConsent/StartDate/text()) &gt; 0)
+					then concat('"StartDate": [{"value":"',$EmailConsent/StartDate/text(),'"}],')
+					else ()        
+					}
+					"CurrentOptStatus": {{
+						"value": "Opt-In"
+					}}
+				}}
+    }}
+	]   	
+  }},
+  {{
+    "type": "{ $PhoneConsent/Operation/text()}",
+    "uri": "{$PhoneConsent/Uri/text()}",
+    "newValue":[
+    {{
+				"value": {{
+					"ChannelType": {{										
+						"value": "Phone"
+					}},
+					"ChannelValue": {{
+						"value": "{$PhoneConsent/ChannelValue/text()}"
+					}},					
+                    {if(exists($PhoneConsent/StartDate) and string-length($PhoneConsent/StartDate/text()) &gt; 0)
+					then concat('"StartDate": [{"value":"',$PhoneConsent/StartDate/text(),'"}],')
+					else ()        
+					}
+					"CurrentOptStatus": {{
+						"value": "Opt-In"
+					}}
+				}}
+    }}
+	]   	
+  }}
+  
+]</body>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description="" name="UpdateEntityResponse" type="reference">
+                        <options>
+                           <option name="referenceTo">CreateEntityResponse</option>
+                        </options>
+                        <xquery>{let $EntityResponse := util:parseJSON($RESTResponse/*:payload/text())
+
+let $entity:=
+&lt;Entity&gt;
+ {$EntityResponse}
+&lt;/Entity&gt;
+
+return 
+&lt;UpdateEntityResponse&gt;
+   &lt;ReltioId&gt;{ fn:substring-after($entity/*:uri, 'entities/') }&lt;/ReltioId&gt;
+   &lt;Successful&gt;{ if( exists($entity/*:uri) ) then true() else false() }&lt;/Successful&gt;
+&lt;/UpdateEntityResponse&gt;}</xquery>
+                     </field>
+                     <field description="" name="Errors" type="reference">
+                        <options>
+                           <option name="referenceTo">errors</option>
+                        </options>
+                        <xquery>{let $payload := $RESTResponse/*:payload/text()
+let $entity_list := util:parseJSON($payload)
+return 
+for $item in $entity_list
+return $item/errors}</xquery>
+                     </field>
+                  </output>
+               </action>
+               <action category="Customer Entity"
+                       failOnError="true"
+                       forSearch="false"
+                       inherits="PostBase"
+                       label="CustomerEntityPartialOverride"
+                       maxRedirects="100"
+                       name="CustomerEntityPartialOverride"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description>A partial override enables you to change parts in an entity or in a relationship. This option works only in the case of updating an entity. If this option is present, when only attributes that are provided in a request will be overwritten</description>
+                  <inheritanceMetadata>
+                     <section type="input">
+                        <section type="inputParameters">
+                           <attribute inherit="inherit" name="accessToken" type="parameter"/>
+                        </section>
+                     </section>
+                     <section type="output">
+                        <section type="outputFields"/>
+                     </section>
+                     <section type="restSimpleBinding">
+                        <attribute inherit="overwrite" name="url" type="url"/>
+                        <section type="body">
+                           <attribute inherit="overwrite" name="generateUsing" type="generateUsing"/>
+                        </section>
+                        <section type="httpHeaders">
+                           <attribute inherit="inherit" name="Authorization" type="header"/>
+                        </section>
+                        <section type="otherParams"/>
+                     </section>
+                  </inheritanceMetadata>
+                  <input>
+                     <parameter name="Entity"
+                                nogen="true"
+                                required="false"
+                                testWith="&lt;Customer xmlns:ns2=&#34;http://schemas.informatica.com/spi/types/2013/12/spi-interface/&#34;&#xA;                xmlns:SOAP-ENV=&#34;http://schemas.xmlsoap.org/soap/envelope/&#34;&#xA;                xmlns:ns4=&#34;http://schemas.active-endpoints.com/appmodules/screenflow/2010/10/avosScreenflow.xsd&#34;&#xA;                xmlns:ns3=&#34;http://schemas.active-endpoints.com/appmodules/screenflow/2011/07/avosCommon.xsd&#34;&gt;&#xA;         &lt;ReltioId&gt;1ITDA9ti&lt;/ReltioId&gt;&#xA;         &lt;FirstName&gt;Gary&lt;/FirstName&gt;&#xA;         &lt;LastName&gt;Ignore&lt;/LastName&gt;&#xA;         &lt;Phone&gt;8184154275&lt;/Phone&gt;&#xA;         &lt;Email&gt;g.bigbird@gmail.com&lt;/Email&gt;&#xA;         &lt;Id&gt;00Q5C000002p34FUAQ&lt;/Id&gt;&#xA;         &lt;BadPhoneNumberFlag&gt;false&lt;/BadPhoneNumberFlag&gt;&#xA;         &lt;CustomerDeceased&gt;false&lt;/CustomerDeceased&gt;&#xA;         &lt;CustomerType&gt;New Customer Acquisition&lt;/CustomerType&gt;&#xA;         &lt;EmployeeFlag&gt;false&lt;/EmployeeFlag&gt;&#xA;         &lt;CountryCode&gt;US&lt;/CountryCode&gt;&#xA;         &lt;EmailStatus&gt;Active&lt;/EmailStatus&gt;&#xA;         &lt;SourceSystemName&gt;SALESFORCE&lt;/SourceSystemName&gt;&#xA;         &lt;SourceSystemType&gt;CRM&lt;/SourceSystemType&gt;&#xA;         &lt;Veteran&gt;false&lt;/Veteran&gt;&#xA;         &lt;sfdcObject&gt;Lead&lt;/sfdcObject&gt;&#xA;         &lt;MailingState&gt;CA&lt;/MailingState&gt;&#xA;      &lt;/Customer&gt;"
+                                type="reference">
+                        <options>
+                           <option name="referenceTo">Customer</option>
+                        </options>
+                     </parameter>
+                  </input>
+                  <binding>
+                     <restSimpleBinding url="{let $uriParts := ($baseURL ,&#34;/reltio/api/&#34;, $tenantID,&#34;/entities?options=partialOverride&#34;)&#xA;return string-join($uriParts)}"
+                                        verb="POST">
+                        <httpHeaders>
+                           <header name="Content-Type">application/json</header>
+                        </httpHeaders>
+                        <body>[
+{{	
+	"type": "configuration/entityTypes/Individual",
+	"crosswalks": [
+     { if(exists($Entity/ReltioId) and string-length($Entity/ReltioId)&gt; 0)
+					then concat('{ "type": "configuration/sources/Reltio", "value": "',$Entity/ReltioId/text(),'" },')
+					else () }
+      {{
+        "type": "configuration/sources/{ if( $Entity/sfdcObject = 'Lead' ) then 'SFDC_Lead' else 'SFDC_Account' }",
+        "value": "{ $Entity/Id/text() }"
+      }}
+    ],
+	"attributes": {{
+		
+		"FirstName": [{{
+				"value": "{$Entity/FirstName/text()}"
+			}}
+		],		
+		"MiddleName": [{{
+				"value": "{$Entity/MiddleName/text()}"
+			}}
+		],
+		"LastName": [{{
+				"value": "{$Entity/LastName/text()}"
+			}}
+		],
+		"PreferredName": [{{
+				"value": "{$Entity/PreferredName/text()}"
+			}}
+		],		
+        {if(exists($Entity/BorrowerPosition) and string-length($Entity/BorrowerPosition)&gt; 0)
+				then concat('"BorrowerPosition": [{"value":"',$Entity/BorrowerPosition/text(),'"}],')
+				else ()        
+		}
+                
+		"Title": [{{
+				"value": "{$Entity/Title/text()}"
+			}}
+		],
+		"Prefix": [{{
+				"value": "{$Entity/Salutation/text()}"
+			}}
+		],
+		"SuffixName": [{{
+				"value": "{$Entity/Suffix/text()}"
+			}}
+		],
+		"Gender": [{{
+				"value": "{$Entity/Gender/text()}"
+			}}
+		],
+		{if(exists($Entity/attributes/DoB) and string-length($Entity/attributes/DoB)&gt; 0)
+        then concat('"DoB": [{"value":"',$Entity/attributes/DoB/text(),'"}],')
+        else ()        
+        }				
+		"LanguagePreference": [{{
+				"value": "{$Entity/LanguagePreference/text()}"
+			}}
+		],
+		"MacPortalIDSUserID": [{{
+				"value": "{$Entity/MacPortalIDSUserID/text()}"
+			}}
+		],	
+		"EmployeeFlag": [{{
+				"value": "{$Entity/EmployeeFlag/text()}"
+			}}
+		],
+		"CustomerType": [{{
+				"value": "{$Entity/CustomerType/text()}"
+			}}
+		],
+		"VeteranFlag": [{{
+				"value": "{$Entity/Veteran/text()}"
+			}}
+		],
+		"MaritalStatus": [{{
+				"value": "{$Entity/MaritalStatus/text()}"
+			}}
+		],
+		"CustomerDeceasedFlag": [{{
+				"value": "{$Entity/CustomerDeceased/text()}"
+			}}
+		],
+		"SSN": [{{
+				"value": "{$Entity/SSN/text()}"
+			}}
+		],
+		"SSNLast4": [{{
+				"value": "{fn:substring($Entity/SSN, 6, 4)}"
+			}}
+		],
+		"EmailStatus": [{{
+				"value": "{$Entity/EmailStatus/text()}"
+			}}
+		],
+		"Loan": [{{
+				"value": "{$Entity/Loan/text()}"
+			}}
+		],		
+		"Addresses": [{{
+				"value": {{
+					"AddressType": [{{
+							"value": "Billing"
+						}}
+					],
+					"Country": {{
+						"value": "{$Entity/BillingCountry/text()}"
+					}},					
+					"AddressLine1": {{
+						"value": "{$Entity/BillingStreet/text()}"
+					}},
+					"City": {{
+						"value": "{$Entity/BillingCity/text()}"
+					}},					
+					{if(exists($Entity/BillingPostalCode) and string-length($Entity/BillingPostalCode)&gt; 0)
+					then concat('"Zip5": [{"value":"',$Entity/BillingPostalCode/text(),'"}],')
+					else ()        
+					}					
+					"StateProvince": {{
+						"value": "{$Entity/BillingState/text()}"
+					}}		
+				}}
+			}},
+			{{
+				"value": {{
+					"AddressType": [{{
+							"value": "Shipping"
+						}}
+					],
+					"Country": {{
+						"value": "{$Entity/ShippingCountry/text()}"
+					}},					
+					"AddressLine1": {{
+						"value": "{$Entity/ShippingStreet/text()}"
+					}},
+					"City": {{
+						"value": "{$Entity/ShippingCity/text()}"
+					}},					
+					{if(exists($Entity/ShippingPostalCode) and string-length($Entity/ShippingPostalCode)&gt; 0)
+					then concat('"Zip5": [{"value":"',$Entity/ShippingPostalCode/text(),'"}],')
+					else ()        
+					}					
+					"StateProvince": {{
+						"value": "{$Entity/ShippingState/text()}"
+					}}		
+				}}
+			}},
+			{{
+				"value": {{
+					"AddressType": [{{
+							"value": "Mailing"
+						}}
+					],
+					"Country": {{
+						"value": "{$Entity/MailingCountry/text()}"
+					}},					
+					"AddressLine1": {{
+						"value": "{$Entity/MailingStreet/text()}"
+					}},
+					"City": {{
+						"value": "{$Entity/MailingCity/text()}"
+					}},					
+					{if(exists($Entity/MailingPostalCode) and string-length($Entity/MailingPostalCode)&gt; 0)
+					then concat('"Zip5": [{"value":"',$Entity/MailingPostalCode/text(),'"}],')
+					else ()        
+					}					
+					"StateProvince": {{
+						"value": "{$Entity/MailingState/text()}"
+					}}		
+				}}
+			}}
+		],
+		"Phone": [{{
+				"value": {{					
+					"Number": {{
+						"value": "{$Entity/Phone/text()}"
+					}},
+					"Type": {{
+						"value": "Phone"
+					}}
+				}}
+			}},
+			{{
+				"value": {{					
+					"Number": {{
+						"value": "{$Entity/WorkPhone/text()}"
+					}},
+					"Type": {{
+						"value": "Work Phone"
+					}}
+				}}
+			}},
+			{{
+				"value": {{					
+					"Number": {{
+						"value": "{$Entity/AlternatePhone/text()}"
+					}},
+					"Type": {{
+						"value": "Alternate Phone"
+					}}
+				}}
+			}}
+		],
+		"Email": [{{
+				"value": {{					
+					"Email": {{
+						"value": "{$Entity/Email/text()}"
+					}},"EmailStatus": {{
+						"value": "{$Entity/EmailStatus/text()}"
+					}}
+				}}
+			}}
+		],
+		"ContactPreferences": [{{
+				"value": {{				
+					{if(exists($Entity/ContactPreferenceLastUpdated) and string-length($Entity/ContactPreferenceLastUpdated)&gt; 0)
+					then concat('"LastUpdatedDate": [{"value":"',$Entity/ContactPreferenceLastUpdated/text(),'"}],')
+					else ()        
+					}					
+					"ContactPreference": {{
+						"value": "{$Entity/ContactPreference/text()}"
+					}}				
+				}}
+			}}
+		],		
+		"SourceSystemDetails": [{{
+			"value": {{				
+				"SourceSystemName": {{
+					"value": "{$Entity/SourceSystemName/text()}"
+				}},				
+				"SourceSystemCustomerIdentifier": {{
+					"value": "{$Entity/Id/text()}"
+				}},						
+				{if(exists($Entity/SourceSystemCustomerLUD) and string-length($Entity/SourceSystemCustomerLUD)&gt; 0)
+				then concat('"SourceSystemCustomerLUD": [{"value":"',$Entity/SourceSystemCustomerLUD/text(),'"}],')
+				else ()        
+				}					
+				{if(exists($Entity/SourceSystemCustomerCreateDate) and string-length($Entity/SourceSystemCustomerCreateDate)&gt; 0)
+				then concat('"SourceSystemCustomerCreateDate": [{"value":"',$Entity/SourceSystemCustomerCreateDate/text(),'"}],')
+				else ()        
+				}
+				"SourceSystemCode": {{
+					"value": "{$Entity/SourceSystemCode/text()}"
+				}},
+				"SourceSystemType": {{
+					"value": "{$Entity/SourceSystemType/text()}"
+				}}				
+				}}
+			}}
+		]
+	}}
+}}
+]</body>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description="" name="UpdateEntityResponse" type="reference">
+                        <options>
+                           <option name="referenceTo">CreateEntityResponse</option>
+                        </options>
+                        <xquery>{let $payload := $RESTResponse/*:payload/text()
+let $entity_list := util:parseJSON($payload)
+let $entityResp:=
+for $item in $entity_list
+return
+&lt;Entity&gt;
+ {$item/*}
+&lt;/Entity&gt;
+
+return
+&lt;UpdateEntityResponse&gt;
+   &lt;ReltioId&gt;{ fn:substring-after($entityResp/object/uri, 'entities/') }&lt;/ReltioId&gt;
+   &lt;Successful&gt;{ if( exists($entityResp[1]/object/uri) ) then true() else false() }&lt;/Successful&gt; 
+&lt;/UpdateEntityResponse&gt;}</xquery>
+                     </field>
+                     <field description="" name="Errors" type="reference">
+                        <options>
+                           <option name="referenceTo">errors</option>
+                        </options>
+                        <xquery>{let $payload := $RESTResponse/*:payload/text()
+let $entity_list := util:parseJSON($payload)
+return 
+for $item in $entity_list
+return $item/errors}</xquery>
+                     </field>
+                  </output>
+               </action>
+               <action category="Export API"
+                       failOnError="true"
+                       forSearch="false"
+                       inherits="PostBase"
+                       label="ExportEntities"
+                       maxRedirects="100"
+                       name="ExportEntities"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description>The Export service provides API users with endpoints to export entities from Reltio Cloud.
+You can run an export operation for all entities or only the entities that match your export filter.
+
+See https://docs.reltio.com/exportapi/exportentitieswithfilter.html</description>
+                  <inheritanceMetadata>
+                     <section type="input">
+                        <section type="inputParameters">
+                           <attribute inherit="inherit" name="accessToken" type="parameter"/>
+                        </section>
+                     </section>
+                     <section type="output">
+                        <section type="outputFields"/>
+                     </section>
+                     <section type="restSimpleBinding">
+                        <attribute inherit="overwrite" name="url" type="url"/>
+                        <section type="body">
+                           <attribute inherit="overwrite" name="generateUsing" type="generateUsing"/>
+                        </section>
+                        <section type="httpHeaders">
+                           <attribute inherit="inherit" name="Authorization" type="header"/>
+                        </section>
+                        <section type="otherParams"/>
+                     </section>
+                  </inheritanceMetadata>
+                  <input>
+                     <parameter description="Format of date and time attribute values (in CSV export only). Possible values: timestamp and readable.&#xA;&#xA;Default value: timestamp."
+                                name="dateFormat"
+                                nogen="true"
+                                required="false"
+                                testWith="timestamp"
+                                type="picklist">
+                        <options>
+                           <option name="values">[{"value":"timestamp","label":"timestamp"},{"value":"readable","label":"readable"}]</option>
+                        </options>
+                     </parameter>
+                     <parameter description="Possible values: csv and json. Defines what output format would be used for export. Default is csv. Export to json is more efficient compared to export to csv."
+                                name="fileFormat"
+                                nogen="true"
+                                required="false"
+                                testWith="csv"
+                                type="picklist">
+                        <options>
+                           <option name="values">[{"value":"json","label":"json"},{"value":"csv","label":"csv"}]</option>
+                        </options>
+                     </parameter>
+                     <parameter description="If true, then export task is divided based on parts. Parts can be executed in parallel on different nodes. If not specified, one task is created."
+                                name="distributed"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="boolean"/>
+                     <parameter description="The number of distributed task parts. If not specified, two tasks are created."
+                                name="taskPartsCount"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="int"/>
+                     <parameter description="(Boolean flag, for CSV only). When true, collects CSV headers from ES."
+                                name="useEsHeadersCollectionExport"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="boolean"/>
+                     <parameter description="Human readable part size. The service splits result files depending on this setting."
+                                name="partSize"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter description="A name of the export task displayed in task status. The name is also used by the Export UI."
+                                name="name"
+                                nogen="true"
+                                required="false"
+                                testWith="IICS Test Job"
+                                type="string"/>
+                     <parameter description="This parameter accepts a list of entity fields to be exported. If not specified, then all fields are present in export.&#xA;&#xA;Example: select=type,attributes.FirstName,attributes.Address.City"
+                                name="select"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="textarea"/>
+                     <parameter description="Enables object filtering by a condition. The format is the same as for filter in the EntitySearch request. However, there are some restrictions because in this case, the export service doesn't use ElasticSearch to filter objects."
+                                name="filter"
+                                nogen="true"
+                                required="false"
+                                testWith="equals(type,'configuration/entityTypes/Individual') and equals(sourceSystems,'CustMart')"
+                                type="string"/>
+                     <parameter description="This is comma-separated list of different options.&#xA;&#xA;Available options:&#xA;&#xA;searchByOV: disabled by default and used to search only by attributes with ov=true.&#xA;parallelExecution: by default, all export jobs for the same tenant are executed one by one. In order to execute them in parallel you should add the parallelExecution option (an export job is either a single task or several distributed tasks)."
+                                name="options"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter description="This parameter determines how the export service should process active and expired objects.&#xA;&#xA;Possible values:&#xA;&#xA;ALL: This option enables exporting of active and expired objects.&#xA;ACTIVE: This option enables only exporting of active objects. This is the default value.&#xA;NOT_ACTIVE: This option enables only exporting of expired objects."
+                                name="activeness"
+                                nogen="true"
+                                required="false"
+                                testWith="ACTIVE"
+                                type="picklist">
+                        <options>
+                           <option name="values">[{"value":"ALL","label":"ALL"},{"value":"ACTIVE","label":"ACTIVE"},{"value":"NOT_ACTIVE","label":"NOT_ACTIVE"}]</option>
+                        </options>
+                     </parameter>
+                     <parameter description="This parameter provides the ability to export data from the S3 storage. Errors that may be returned are shown below."
+                                name="dataSource"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter description="This parameter can have two values: name or label. If label is the value, then for CSV column names, attribute labels are used. If nameis the value, then for CSV column names, attribute names are used.&#xA;&#xA;Default value:name."
+                                name="headerStyle"
+                                nogen="true"
+                                required="false"
+                                testWith="name"
+                                type="picklist">
+                        <options>
+                           <option name="values">[{"value":"name","label":"name"},{"value":"label","label":"label"}]</option>
+                        </options>
+                     </parameter>
+                     <parameter description="JSON object containing parameters for filtering exported entities."
+                                name="exportFilter"
+                                required="false"
+                                testWith="&lt;ExportFilter xmlns:m=&#34;urn:informatica:ae:xquery:json2xml:meta-data&#34;&gt;&#xA;    &lt;ovOnly&gt;true&lt;/ovOnly&gt;&#xA;    &lt;headerFormat&gt;name&lt;/headerFormat&gt;&#xA;    &lt;updateTimeFilter&gt;&#xA;        &lt;since&gt;1557015664541&lt;/since&gt;&#xA;    &lt;/updateTimeFilter&gt;&#xA;    &lt;includeType&gt;configuration/entityTypes/Individual&lt;/includeType&gt;&#xA;&lt;/ExportFilter&gt;"
+                                type="reference">
+                        <options>
+                           <option name="referenceTo">ExportFilter</option>
+                        </options>
+                     </parameter>
+                     <parameter description="Option To switch between  Exploded and flat CSV output"
+                                name="exploded"
+                                nogen="true"
+                                required="false"
+                                testWith="true"
+                                type="boolean"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding url="{(: {{ExportServiceURL}}/export/{{Tenant}}/entities :)&#xA;let $uriParts := ($baseURL ,&#34;/jobs/export/&#34;, $tenantID, &#34;/entities&#34; )&#xA;&#xA;let $dateFormatParam := if (empty($dateFormat )) then () else concat(&#34;dateFormat=&#34;,encode-for-uri($dateFormat)) &#xA;let $fileFormatParam  := if (empty($fileFormat)) then () else concat(&#34;fileFormat=&#34;,encode-for-uri($fileFormat )) &#xA;let $distributedParam := if (empty($distributed)) then () else concat(&#34;distributed=&#34;,encode-for-uri($distributed  ))&#xA;let $taskPartsCountParam := if (empty($taskPartsCount)) then () else concat(&#34;taskPartsCount=&#34;,encode-for-uri($taskPartsCount))&#xA;let $useEsHeadersCollectionExportParam  := if (empty($useEsHeadersCollectionExport)) then () else concat(&#34;useEsHeadersCollectionExport=&#34;,encode-for-uri($useEsHeadersCollectionExport))&#xA;let $partSizeParam   := if (empty($partSize)) then () else concat(&#34;partSize=&#34;,encode-for-uri($partSize))&#xA;let $nameParam := if (empty($name)) then () else concat(&#34;name=&#34;,encode-for-uri($name))&#xA;let $selectParam := if (empty($select)) then () else concat(&#34;select=&#34;,encode-for-uri($select))&#xA;let $filterParam := if (empty($filter)) then () else concat(&#34;filter=&#34;,encode-for-uri($filter))&#xA;let $optionsParam := if (empty($options)) then () else concat(&#34;options=&#34;,encode-for-uri($options))&#xA;let $activenessParam := if (empty($activeness)) then () else concat(&#34;activeness=&#34;,encode-for-uri($activeness))&#xA;let $dataSourceParam  := if (empty($dataSource)) then () else concat(&#34;dataSource=&#34;,encode-for-uri($dataSource))&#xA;let $headerStyleParam := if (empty($headerStyle )) then () else concat(&#34;headerStyle=&#34;,encode-for-uri($headerStyle))&#xA;let $expoldedParam := if (empty($exploded )) then () else concat(&#34;exploded=&#34;,encode-for-uri($exploded))&#xA;(:param list construction:)&#xA;let $paramList := (&#xA;         $dateFormatParam &#xA;        ,$fileFormatParam&#xA;        ,$distributedParam&#xA;        ,$taskPartsCountParam&#xA;        ,$useEsHeadersCollectionExportParam&#xA;        ,$partSizeParam&#xA;        ,$nameParam&#xA;        ,$selectParam&#xA;        ,$filterParam&#xA;        ,$optionsParam&#xA;        ,$activenessParam&#xA;        ,$dataSourceParam&#xA;        ,$headerStyleParam&#xA;        ,$expoldedParam)&#xA;(:complete url:)&#xA;let $queryParams:= if( empty($paramList) ) then () else string-join($paramList,&#34;&amp;amp;&#34;)&#xA;&#xA;let $apiUrl := string-join($uriParts)&#xA;return if(empty($queryParams))&#xA;&#x9;then $apiUrl&#xA;    else concat($apiUrl, '?',$queryParams)}"
+                                        verb="POST">
+                        <body>{{
+    {
+    if (empty($exportFilter/ovOnly)) then () 
+    else concat('"ovOnly": ', $exportFilter/ovOnly/text(),',')
+    }
+    {
+    if (empty($exportFilter/headerFormat)) then () 
+    else concat('"headerFormat": "', $exportFilter/headerFormat/text(),'",')
+    }
+    "updateTimeFilter": {{
+        { for $element in  $exportFilter/updateTimeFilter/*
+        return concat('"',local-name($element),'": ', $element/text())
+        }
+    }},
+    "includeType": [
+        {
+        string-join(
+        for $item in $exportFilter/includeType
+        return concat('"',$item/text(),'"'),
+        ",")
+        }
+    ]
+}}</body>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description=""
+                            entireResponse="true"
+                            name="StartExportJobResponse"
+                            type="reference">
+                        <options>
+                           <option name="referenceTo">StartExportJobResponse</option>
+                        </options>
+                     </field>
+                  </output>
+               </action>
+               <action category="Export API"
+                       failOnError="true"
+                       forSearch="false"
+                       inherits="GetBase"
+                       label="GetTaskByID"
+                       maxRedirects="100"
+                       name="GetTaskByID"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description>Returns the task with the given ID or an error if there is no task with this ID.</description>
+                  <inheritanceMetadata>
+                     <section type="input">
+                        <section type="inputParameters">
+                           <attribute inherit="inherit" name="accessToken" type="parameter"/>
+                        </section>
+                     </section>
+                     <section type="output">
+                        <section type="outputFields"/>
+                     </section>
+                     <section type="restSimpleBinding">
+                        <attribute inherit="overwrite" name="url" type="url"/>
+                        <section type="httpHeaders">
+                           <attribute inherit="inherit" name="Authorization" type="header"/>
+                        </section>
+                        <section type="otherParams"/>
+                     </section>
+                  </inheritanceMetadata>
+                  <input>
+                     <parameter description="Task ID"
+                                name="taskID"
+                                required="false"
+                                testWith="cc426d15-8bd7-4d8a-a7e8-bd4b5935e442"
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding url="{let $uriParts := ($baseURL ,&#34;/jobs/&#34;, $tenantID, &#34;/tasks/&#34;,  $taskID )&#xA;return string-join($uriParts)}"
+                                        verb="GET"/>
+                  </binding>
+                  <output>
+                     <field description=""
+                            name="getTaskResponse"
+                            type="reference"
+                            xmlElement=".">
+                        <options>
+                           <option name="referenceTo">getTaskResponse</option>
+                        </options>
+                     </field>
+                  </output>
+               </action>
+               <action category="Export API"
+                       failOnError="true"
+                       forSearch="false"
+                       inherits="PostBase"
+                       label="decryptExportUrl"
+                       maxRedirects="100"
+                       name="decryptExportUrl"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description>Decrypts Exported File Download URL. Response contains decrypted URL which can be used for download:</description>
+                  <inheritanceMetadata>
+                     <section type="input">
+                        <section type="inputParameters">
+                           <attribute inherit="inherit" name="accessToken" type="parameter"/>
+                        </section>
+                     </section>
+                     <section type="output">
+                        <section type="outputFields"/>
+                     </section>
+                     <section type="restSimpleBinding">
+                        <attribute inherit="overwrite" name="url" type="url"/>
+                        <section type="body">
+                           <attribute inherit="overwrite" name="generateUsing" type="generateUsing"/>
+                        </section>
+                        <section type="httpHeaders">
+                           <attribute inherit="inherit" name="Authorization" type="header"/>
+                        </section>
+                        <section type="otherParams"/>
+                     </section>
+                  </inheritanceMetadata>
+                  <input>
+                     <parameter name="DecryptUrl"
+                                nogen="true"
+                                required="true"
+                                testWith="https://dev.reltio.com/download.html?tenant=wJWznbR6vpI5WDT&amp;amp;downloadExportUrl=https%3A%2F%2Freltio-data-exports.s3.amazonaws.com%2Fentities%2Fintegration.user%2F2020%2F03-Feb-2020%2Fwjwznbr6vpi5wdt_22-42_entities_c280%2Fpart-00000.zip%3FX-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Date%3D20200203T224253Z%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Expires%3D604800%26X-Amz-Credential%3DAKIAJSS3VNFTDDPMRPTQ%252F20200203%252Fus-east-1%252Fs3%252Faws4_request%26X-Amz-Signature%3D3e964338d172435507ec0e2b2bed0ca2dce73514b87b9635e012df2b1dfdb81d"
+                                type="url"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding url="{let $uriParts := ($baseURL ,&#34;/jobs/export/&#34;, $tenantID, &#34;/decryptUrl&#34; )&#xA;return string-join($uriParts)&#xA;&#xA;(:  {ExportServiceURL}/export/{{tenant}}/decryptUrl :)}"
+                                        verb="POST">
+                        <body>{$DecryptUrl}</body>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description="" name="decryptedExportURL" type="url">
+                        <xquery>{$RESTResponse/*:payload/text()}</xquery>
+                     </field>
+                  </output>
+               </action>
+               <action category=""
+                       failOnError="true"
+                       forSearch="false"
+                       label="getSampleData"
+                       maxRedirects="100"
+                       name="getSampleData"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description/>
+                  <input/>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="https://gist.githubusercontent.com/jbrazda/0f5079a111f1b67470cef37b731362f2/raw/e62f10a88da0e9245441b172fb46a25f92a208b4/reltio_filter.json"
+                                        verb="GET"/>
+                  </binding>
+                  <output/>
+               </action>
+            </actions>
+            <objects>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="AuthResponse">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="access_token" type="string"/>
+                     <field name="refresh_token" type="string"/>
+                     <field name="scope" type="string"/>
+                     <field name="token_type" type="string"/>
+                     <field name="expires_in" type="int"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="Entity">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="updatedTime" type="double"/>
+                     <field name="updatedBy" type="string"/>
+                     <field name="createdBy" type="string"/>
+                     <field name="secondaryLabel" type="string"/>
+                     <field name="analyticsAttributes" type="string"/>
+                     <field name="createdTime" type="double"/>
+                     <field name="attributes" type="reference">
+                        <options>
+                           <option name="referenceTo">attributes</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="label" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="crosswalks" type="objectlist">
+                        <options>
+                           <option name="referenceTo">crosswalks</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="isFavorite" type="boolean"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="attributes">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="Zip" type="objectlist">
+                        <options>
+                           <option name="referenceTo">Zip</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="SubjectPropertyKey" type="reference">
+                        <options>
+                           <option name="referenceTo">SubjectPropertyKey</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="VerificationStatus" type="reference">
+                        <options>
+                           <option name="referenceTo">VerificationStatus</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="LoanKey" type="reference">
+                        <options>
+                           <option name="referenceTo">LoanKey</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="StateProvince" type="reference">
+                        <options>
+                           <option name="referenceTo">StateProvince</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="City" type="objectlist">
+                        <options>
+                           <option name="referenceTo">City</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="PropertyType" type="reference">
+                        <options>
+                           <option name="referenceTo">PropertyType</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="ValueAmount" type="reference">
+                        <options>
+                           <option name="referenceTo">ValueAmount</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="County" type="reference">
+                        <options>
+                           <option name="referenceTo">County</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="AddressLine2" type="reference">
+                        <options>
+                           <option name="referenceTo">AddressLine2</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="AddressLine1" type="objectlist">
+                        <options>
+                           <option name="referenceTo">AddressLine1</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="NumberOfUnits" type="reference">
+                        <options>
+                           <option name="referenceTo">NumberOfUnits</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="Country" type="reference">
+                        <options>
+                           <option name="referenceTo">Country</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="VerificationStatusDetails" type="reference">
+                        <options>
+                           <option name="referenceTo">VerificationStatusDetails</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="PreferredName" type="string"/>
+                     <field name="Title" type="string"/>
+                     <field name="Prefix" type="string"/>
+                     <field name="SuffixName" type="string"/>
+                     <field name="FirstName" type="string"/>
+                     <field name="AlternateFirstNamet" type="string"/>
+                     <field name="MiddleName" type="string"/>
+                     <field name="AlternateMiddleName" type="string"/>
+                     <field name="LastName" type="string"/>
+                     <field name="AlternateLastName" type="string"/>
+                     <field name="MacPortalIDSUserID" type="string"/>
+                     <field name="ServicingPortalIDSUserID" type="string"/>
+                     <field name="Gender" type="string"/>
+                     <field name="DriverLicense" type="string"/>
+                     <field name="MaskedDriverLicense" type="string"/>
+                     <field name="DoB" type="date"/>
+                     <field name="BirthCity" type="string"/>
+                     <field name="BirthState" type="string"/>
+                     <field name="BirthCountry" type="string"/>
+                     <field name="EmployeeFlag" type="boolean"/>
+                     <field name="CustomerType" type="string"/>
+                     <field name="CustomerSubType" type="string"/>
+                     <field name="VeteranFlag" type="boolean"/>
+                     <field name="BranchofService" type="string"/>
+                     <field name="ServiceStatus" type="string"/>
+                     <field name="MaritalStatus" type="string"/>
+                     <field name="CustomerCreateDate" type="date"/>
+                     <field name="CustomerStatus" type="string"/>
+                     <field name="CustomerDeceasedFlag" type="boolean"/>
+                     <field name="MacPortalLastLogInDate" type="datetime"/>
+                     <field name="LastCustomerWebsiteAccess" type="datetime"/>
+                     <field name="Ethnicity" type="string"/>
+                     <field name="LanguagePreference" type="string"/>
+                     <field name="IncomeBand" type="double"/>
+                     <field name="DomesticHouseholdIncome" type="double"/>
+                     <field name="CurrencyType" type="string"/>
+                     <field name="HouseholdSize" type="int"/>
+                     <field name="HasDependentsFlag" type="boolean"/>
+                     <field name="OccupationType" type="string"/>
+                     <field name="ParentsFlag" type="string"/>
+                     <field name="OccupationJobTitle" type="string"/>
+                     <field name="MonthlyGrossIncome" type="double"/>
+                     <field name="PrimaryLanguageCode" type="string"/>
+                     <field name="PropertyIdFromSource" type="string"/>
+                     <field name="SSN" type="string"/>
+                     <field name="SSNLast4" type="string"/>
+                     <field name="LatestFICO" type="int"/>
+                     <field name="EncompassMilestone" type="string"/>
+                     <field name="BorrowerPosition" type="int"/>
+                     <field name="Loan" type="string"/>
+                     <field name="Education" type="objectlist">
+                        <options>
+                           <option name="referenceTo">Education</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="Addresses" type="objectlist">
+                        <options>
+                           <option name="referenceTo">Addresses</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="Phone" type="objectlist">
+                        <options>
+                           <option name="referenceTo">Phone</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="Email" type="objectlist">
+                        <options>
+                           <option name="referenceTo">Email</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="MultiChannelCommunicationConsent" type="objectlist">
+                        <options>
+                           <option name="referenceTo">MultiChannelCommunicationConsent</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="SourceSystemDetails" type="objectlist">
+                        <options>
+                           <option name="referenceTo">SourceSystemDetails</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="ContactPreferences" type="reference">
+                        <options>
+                           <option name="referenceTo">ContactPreferences</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="Zip">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="label" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="reference">
+                        <options>
+                           <option name="referenceTo">value</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="value">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="Zip4" type="reference">
+                        <options>
+                           <option name="referenceTo">Zip4</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="Zip5" type="reference">
+                        <options>
+                           <option name="referenceTo">Zip5</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="Zip4">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="int"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="Zip5">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="int"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="SubjectPropertyKey">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="VerificationStatus">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="LoanKey">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="int"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="StateProvince">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="City">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="PropertyType">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="int"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="ValueAmount">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="int"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="County">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="int"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="AddressLine2">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="AddressLine1">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="NumberOfUnits">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="int"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="Country">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="VerificationStatusDetails">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="ov" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="crosswalks">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="updateDate" type="datetime"/>
+                     <field name="singleAttributeUpdateDates" type="string"/>
+                     <field name="attributes" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="uri" type="string"/>
+                     <field name="value" type="string"/>
+                     <field name="reltioLoadDate" type="datetime"/>
+                     <field name="createDate" type="datetime"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="Education">
+                  <description/>
+                  <detail>
+                     <field name="SchoolName" type="string"/>
+                     <field name="Type" type="string"/>
+                     <field name="Degree" type="string"/>
+                     <field name="StartYear" type="int"/>
+                     <field name="EndYear" type="int"/>
+                     <field name="Level" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="SourceSystemDetails">
+                  <description/>
+                  <detail>
+                     <field name="SourceSystemCode" type="string"/>
+                     <field name="SourceSystemType" type="string"/>
+                     <field name="SourceSystemName" type="string"/>
+                     <field name="SourceSystemCountry" type="string"/>
+                     <field name="SourceSystemBrand" type="string"/>
+                     <field name="SourceSystemCustomerIdentifier" type="string"/>
+                     <field name="SourceSystemEffectiveCustomerID" type="string"/>
+                     <field name="SourceSystemCustomerLUD" type="string"/>
+                     <field name="SourceSystemCustomerCreateDate" type="date"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="MultiChannelCommunicationConsent">
+                  <description/>
+                  <detail>
+                     <field name="ChannelType" type="string"/>
+                     <field name="ChannelValue" type="string"/>
+                     <field name="CurrentOptStatus" type="string"/>
+                     <field name="StartDate" type="date"/>
+                     <field name="ExpirationDate" type="date"/>
+                     <field name="OptInSourceLocation" type="string"/>
+                     <field name="OptOutSourceLocation" type="string"/>
+                     <field name="OptOutReason" type="string"/>
+                     <field name="MessageFormatType" type="string"/>
+                     <field name="CommunicationType" type="string"/>
+                     <field name="CommunicationFrequency" type="string"/>
+                     <field name="ChannelPreferenceFlag" type="string"/>
+                     <field name="Uri" type="string"/>
+                     <field name="Operation" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="Email">
+                  <description/>
+                  <detail>
+                     <field name="Country" type="string"/>
+                     <field name="Email" type="string"/>
+                     <field name="EmailConfidence" type="string"/>
+                     <field name="Type" type="string"/>
+                     <field name="Active" type="string"/>
+                     <field name="EmailLUD" type="date"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="Phone">
+                  <description/>
+                  <detail>
+                     <field name="GeoCountry" type="string"/>
+                     <field name="Number" type="string"/>
+                     <field name="PhoneConfidence" type="string"/>
+                     <field name="Type" type="string"/>
+                     <field name="ExtensExtensionion" type="string"/>
+                     <field name="PhoneDefaultIndicator" type="string"/>
+                     <field name="PhoneLUD" type="date"/>
+                     <field name="CountryCode" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="Addresses">
+                  <description/>
+                  <detail>
+                     <field name="AddressType" type="string"/>
+                     <field name="AddressConfidence" type="string"/>
+                     <field name="Country" type="string"/>
+                     <field name="Apartment" type="string"/>
+                     <field name="Building" type="string"/>
+                     <field name="AddressDefaultIndicator" type="string"/>
+                     <field name="AddressLine1" type="string"/>
+                     <field name="AddressLine2" type="string"/>
+                     <field name="AddressLine3" type="string"/>
+                     <field name="AddressLine4" type="string"/>
+                     <field name="City" type="string"/>
+                     <field name="County" type="string"/>
+                     <field name="StateProvince" type="string"/>
+                     <field name="Zip5" type="string"/>
+                     <field name="Zip4" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="ContactPreferences">
+                  <description/>
+                  <detail>
+                     <field name="ContactPreference" type="string"/>
+                     <field name="LastUpdatedDate" type="date"/>
+                     <field name="Uri" type="string"/>
+                     <field name="Operation" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="CreateEntityResponse">
+                  <description/>
+                  <detail>
+                     <field name="ReltioId" type="string"/>
+                     <field name="Successful" type="boolean"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="Customer">
+                  <description/>
+                  <detail>
+                     <field name="ReltioId" type="string"/>
+                     <field name="FirstName" type="string"/>
+                     <field name="MiddleName" type="string"/>
+                     <field name="LastName" type="string"/>
+                     <field name="DoB" type="date"/>
+                     <field name="LanguagePreference" type="string"/>
+                     <field name="BillingCountry" type="string"/>
+                     <field name="BillingStreet" type="string"/>
+                     <field name="BillingCity" type="string"/>
+                     <field name="BillingState" type="string"/>
+                     <field name="BillingPostalCode" type="string"/>
+                     <field name="Phone" type="string"/>
+                     <field name="WorkPhone" type="string"/>
+                     <field name="AlternatePhone" type="string"/>
+                     <field name="Email" type="string"/>
+                     <field name="ContactPreference" type="string"/>
+                     <field name="Id" type="string"/>
+                     <field name="ContactPreferenceLastUpdated" type="datetime"/>
+                     <field name="BadPhoneNumberFlag" type="boolean"/>
+                     <field name="CustomerDeceased" type="boolean"/>
+                     <field name="CustomerType" type="string"/>
+                     <field name="EmployeeFlag" type="boolean"/>
+                     <field name="CountryCode" type="string"/>
+                     <field name="Gender" type="string"/>
+                     <field name="EmailStatus" type="string"/>
+                     <field name="SourceSystemName" type="string"/>
+                     <field name="SourceSystemCustomerLUD" type="datetime"/>
+                     <field name="SourceSystemCode" type="string"/>
+                     <field name="SourceSystemType" type="string"/>
+                     <field name="Loan" type="string"/>
+                     <field name="MacPortalIDSUserID" type="string"/>
+                     <field name="MaritalStatus" type="string"/>
+                     <field name="Salutation" type="string"/>
+                     <field name="SSN" type="string"/>
+                     <field name="Suffix" type="string"/>
+                     <field name="Title" type="string"/>
+                     <field name="SourceSystemCustomerCreateDate" type="date"/>
+                     <field name="Veteran" type="boolean"/>
+                     <field name="sfdcObject" type="string"/>
+                     <field name="MailingCity" type="string"/>
+                     <field name="MailingCountry" type="string"/>
+                     <field name="MailingPostalCode" type="string"/>
+                     <field name="MailingState" type="string"/>
+                     <field name="MailingStreet" type="string"/>
+                     <field name="ShippingCity" type="string"/>
+                     <field name="ShippingCountry" type="string"/>
+                     <field name="ShippingPostalCode" type="string"/>
+                     <field name="ShippingState" type="string"/>
+                     <field name="ShippingStreet" type="string"/>
+                     <field name="BorrowerPosition" type="int"/>
+                     <field name="PreferredName" type="string"/>
+                     <field name="SSNLast4" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="errors">
+                  <description/>
+                  <detail>
+                     <field name="severity" type="string"/>
+                     <field name="errorDetailMessage" type="string"/>
+                     <field name="errorMessage" type="string"/>
+                     <field name="errorCode" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="ExportFilter">
+                  <description>Object Represents Export  Filter Parameters as documented here
+https://docs.reltio.com/exportapi/exportentitieswithfilter.html</description>
+                  <detail>
+                     <field name="ovOnly" type="boolean"/>
+                     <field name="headerFormat" type="picklist">
+                        <options>
+                           <option name="values">[{"value":"name","label":"name"},{"value":"label","label":"label"}]</option>
+                        </options>
+                     </field>
+                     <field name="updateTimeFilter" type="reference">
+                        <options>
+                           <option name="referenceTo">UpdateTimeFilter</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="includeType" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="UpdateTimeFilter">
+                  <description>JSON object with update time range.
+
+Format:
+
+updateTimeFilter: {since : 1394726957000, to : 1394726959000}: either only one constraint or both of them are allowed.</description>
+                  <detail>
+                     <field name="since" type="int"/>
+                     <field name="to" type="int"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="StartExportJobResponse">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="exportType" type="string"/>
+                     <field name="groupId" type="string"/>
+                     <field name="details" type="string"/>
+                     <field name="taskIds" type="string"/>
+                     <field name="version" type="string"/>
+                     <field name="status" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="getTaskResponse">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="updatedTime" type="double"/>
+                     <field name="updatedBy" type="string"/>
+                     <field name="groupId" type="string"/>
+                     <field name="type" type="string"/>
+                     <field name="nodesGroup" type="string"/>
+                     <field name="duration" type="string"/>
+                     <field name="createdOnHost" type="string"/>
+                     <field name="createdBy" type="string"/>
+                     <field name="name" type="string"/>
+                     <field name="createdTime" type="double"/>
+                     <field name="startTime" type="double"/>
+                     <field name="id" type="string"/>
+                     <field name="endTime" type="double"/>
+                     <field name="throughput" type="double"/>
+                     <field name="currentState" type="reference">
+                        <options>
+                           <option name="referenceTo">currentState</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="executedOnHost" type="string"/>
+                     <field name="parameters" type="reference">
+                        <options>
+                           <option name="referenceTo">parameters</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="status" type="string"/>
+                     <field name="parallelExecution" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="currentState">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="exportUrls" type="string"/>
+                     <field name="globalStatus" type="reference">
+                        <options>
+                           <option name="referenceTo">globalStatus</option>
+                           <option name="relationshipName">Child</option>
+                        </options>
+                     </field>
+                     <field name="lastHourThroughput" type="int"/>
+                     <field name="statusId" type="int"/>
+                     <field name="numberOfProcessedObjects" type="int"/>
+                     <field name="numberOfObjects" type="int"/>
+                     <field name="lastExecutionEC2Instances" type="string"/>
+                     <field name="storageType" type="string"/>
+                     <field name="numberOfFailedToPublishEvents" type="int"/>
+                     <field name="status" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="globalStatus">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="headerTotal" type="int"/>
+                     <field name="lastFiveMinReadThroughput" type="int"/>
+                     <field name="lastFiveMinThroughput" type="int"/>
+                     <field name="entitiesTotal" type="int"/>
+                     <field name="headerNumber" type="int"/>
+                     <field name="entitiesNumber" type="int"/>
+                     <field name="overallThroughput" type="int"/>
+                     <field name="overallReadThroughput" type="int"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="parameters">
+                  <description>An automatically generated process object</description>
+                  <detail>
+                     <field name="skipPostprocessing" type="string"/>
+                     <field name="exploded" type="string"/>
+                     <field name="includeType" type="string"/>
+                     <field name="specifiedMailAddress" type="string"/>
+                     <field name="dateFormat" type="string"/>
+                     <field name="queryParams" type="string"/>
+                     <field name="mailAddress" type="string"/>
+                     <field name="exportName" type="string"/>
+                     <field name="exportPath" type="string"/>
+                     <field name="useEsHeadersCollectionExport" type="string"/>
+                     <field name="fileCompression" type="string"/>
+                     <field name="sePrefix" type="string"/>
+                     <field name="headerFormat" type="string"/>
+                     <field name="exportType" type="string"/>
+                     <field name="tenantId" type="string"/>
+                     <field name="encryptUrl" type="string"/>
+                     <field name="headersStyle" type="string"/>
+                     <field name="updatedSince" type="double"/>
+                     <field name="ovOnly" type="string"/>
+                     <field name="activeness" type="string"/>
+                     <field name="taskId" type="string"/>
+                     <field name="fileFormat" type="string"/>
+                     <field name="username" type="string"/>
+                  </detail>
+               </processObject>
+               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                              isByCopy="true"
+                              name="listOfStrings">
+                  <description/>
+                  <detail>
+                     <field name="string" type="string"/>
+                  </detail>
+               </processObject>
+            </objects>
+         </businessConnector>
+      </types1:Entry>
+      <types1:GUID>9gGJkUhPrCxb1bbQmQYrsq</types1:GUID>
+      <types1:DisplayName>Reltio</types1:DisplayName>
+   </types1:Item>
+   <types1:CurrentServerDateTime>2020-12-06T20:44:05.009Z</types1:CurrentServerDateTime>
+</aetgt:getResponse>
