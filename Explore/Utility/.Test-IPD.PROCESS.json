@@ -1,0 +1,24 @@
+{
+  "objectInfo" : {
+    "id" : "jQ6ysj5ze8GfNl4Kjf8bYQ",
+    "name" : "Test-IPD",
+    "type" : "PROCESS",
+    "metadata" : {
+      "modelVersion" : {
+        "major" : 1,
+        "minor" : 0
+      },
+      "repoInfo" : {
+        "repoHandle" : "tRJi4tciSrZMSPf-gt-9776841-2020-09-02T16:43:33.311Z::pd.xml"
+      },
+      "contextAttributes" : null,
+      "additionalInfo" : {
+        "description" : "",
+        "contentType" : "application/json; charset=utf-8",
+        "documentState" : "VALID"
+      }
+    }
+  },
+  "dataFileExtension" : "xml",
+  "objectRefs" : [ ]
+}
