@@ -1,0 +1,24 @@
+{
+  "objectInfo" : {
+    "id" : "a1iOfgZ8ePEkDnwrQktviJ",
+    "name" : "ServiceNow-Table-API-actions",
+    "type" : "AI_CONNECTION",
+    "metadata" : {
+      "modelVersion" : {
+        "major" : 1,
+        "minor" : 0
+      },
+      "repoInfo" : {
+        "repoHandle" : "J5bfOC2XZPnE29E-gt-205797-2020-09-22T17:49:01.356Z::conn.xml"
+      },
+      "contextAttributes" : null,
+      "additionalInfo" : {
+        "description" : "",
+        "contentType" : "application/json; charset=utf-8",
+        "documentState" : "INVALID"
+      }
+    }
+  },
+  "dataFileExtension" : "xml",
+  "objectRefs" : [ ]
+}

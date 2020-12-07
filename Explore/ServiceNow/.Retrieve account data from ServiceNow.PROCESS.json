@@ -1,0 +1,44 @@
+{
+  "objectInfo" : {
+    "id" : "7KFf9ysdy1ZfP3S4D4c5Y3",
+    "name" : "Retrieve account data from ServiceNow",
+    "type" : "PROCESS",
+    "metadata" : {
+      "modelVersion" : {
+        "major" : 1,
+        "minor" : 0
+      },
+      "repoInfo" : {
+        "repoHandle" : "RruYZ06NYcmYsGu-gt-490852-2020-09-22T17:49:01.769Z::pd.xml"
+      },
+      "contextAttributes" : null,
+      "additionalInfo" : {
+        "description" : "This process is invoked with a ServiceNow account ID. ServiceNow credentials are embedded in the ServiceNow-Table-API-actions connection. A valid sys_id of an account is passed when invoking the process. The value returned from the \"Create an account in ServiceNow\" process can be used as an input.",
+        "contentType" : "application/json; charset=utf-8",
+        "documentState" : "VALID"
+      }
+    }
+  },
+  "dataFileExtension" : "xml",
+  "objectRefs" : [ {
+    "id" : "a1iOfgZ8ePEkDnwrQktviJ",
+    "name" : "ServiceNow-Table-API-actions",
+    "type" : "AI_CONNECTION",
+    "metadata" : {
+      "modelVersion" : {
+        "major" : 1,
+        "minor" : 0
+      },
+      "repoInfo" : {
+        "repoHandle" : "J5bfOC2XZPnE29E-gt-205797-2020-09-22T17:49:01.356Z::conn.xml"
+      },
+      "contextAttributes" : null,
+      "additionalInfo" : {
+        "description" : "",
+        "contentType" : "application/json; charset=utf-8",
+        "documentState" : "INVALID"
+      }
+    },
+    "path" : "/Explore/ServiceNow"
+  } ]
+}

@@ -1,0 +1,44 @@
+{
+  "objectInfo" : {
+    "id" : "1euggl6eHQkbwtanzsfE21",
+    "name" : "Create an account in ServiceNow",
+    "type" : "PROCESS",
+    "metadata" : {
+      "modelVersion" : {
+        "major" : 1,
+        "minor" : 0
+      },
+      "repoInfo" : {
+        "repoHandle" : "unOjseGbciZBpDU-gt-490862-2020-09-22T17:49:01.833Z::pd.xml"
+      },
+      "contextAttributes" : null,
+      "additionalInfo" : {
+        "description" : "A process that demonstrates how to create an account in ServiceNow. Credentials are embedded in the ServiceNow-Table-API-actions connection, and the new account inputs are passed in via a POST invocation.",
+        "contentType" : "application/json; charset=utf-8",
+        "documentState" : "VALID"
+      }
+    }
+  },
+  "dataFileExtension" : "xml",
+  "objectRefs" : [ {
+    "id" : "a1iOfgZ8ePEkDnwrQktviJ",
+    "name" : "ServiceNow-Table-API-actions",
+    "type" : "AI_CONNECTION",
+    "metadata" : {
+      "modelVersion" : {
+        "major" : 1,
+        "minor" : 0
+      },
+      "repoInfo" : {
+        "repoHandle" : "J5bfOC2XZPnE29E-gt-205797-2020-09-22T17:49:01.356Z::conn.xml"
+      },
+      "contextAttributes" : null,
+      "additionalInfo" : {
+        "description" : "",
+        "contentType" : "application/json; charset=utf-8",
+        "documentState" : "INVALID"
+      }
+    },
+    "path" : "/Explore/ServiceNow"
+  } ]
+}

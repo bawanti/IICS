@@ -1,0 +1,696 @@
+<aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.com/appmodules/repository/2010/10/avrepository.xsd"
+                   xmlns:types1="http://schemas.active-endpoints.com/appmodules/repository/2010/10/avrepository.xsd">
+   <types1:Item>
+      <types1:EntryId>kSSHCwkNmumf6S3-gt-205789-2020-09-22T17:49:01.316Z::svc.xml</types1:EntryId>
+      <types1:Name>ServiceNow_Table_API</types1:Name>
+      <types1:MimeType>application/xml+businesssconnector</types1:MimeType>
+      <types1:Description/>
+      <types1:AppliesTo/>
+      <types1:Tags/>
+      <types1:VersionLabel>1.0</types1:VersionLabel>
+      <types1:State>CURRENT</types1:State>
+      <types1:ProcessGroup/>
+      <types1:CreatedBy>basav1@iics.com</types1:CreatedBy>
+      <types1:CreationDate>2020-09-22T17:49:01Z</types1:CreationDate>
+      <types1:ModifiedBy/>
+      <types1:PublicationStatus>published</types1:PublicationStatus>
+      <types1:PublishedBy>basav1@iics.com</types1:PublishedBy>
+      <types1:PublicationDate>2020-09-25T15:50:30Z</types1:PublicationDate>
+      <types1:PublishedContributionId>project:/rt.connector/ServiceNow_Table_API/ServiceNow_Table_API_svcDef.xml</types1:PublishedContributionId>
+      <types1:AutosaveExists>false</types1:AutosaveExists>
+      <types1:Entry>
+         <businessConnector xmlns="http://schemas.informatica.com/socrates/data-services/2014/05/business-connector-model.xsd"
+                            agentOnly="false"
+                            debug="false"
+                            displayName="ServiceNow Table API"
+                            label=""
+                            name="ServiceNow_Table_API"
+                            uuid="695caafc-f53e-41d0-b1d4-f65144d76bb5">
+            <description/>
+            <tags/>
+            <connectionAttributes xmlns="http://schemas.informatica.com/appmodules/screenflow/2014/04/avosConnectors.xsd">
+               <connectionAttribute description=""
+                                    masked="false"
+                                    name="SNOW_client_id"
+                                    required="true"
+                                    testWith=""
+                                    type="string"/>
+               <connectionAttribute description=""
+                                    masked="false"
+                                    name="SNOW_client_secret"
+                                    required="true"
+                                    testWith=""
+                                    type="string"/>
+               <connectionAttribute description=""
+                                    masked="false"
+                                    name="SNOW_username"
+                                    required="true"
+                                    testWith=""
+                                    type="string"/>
+               <connectionAttribute description=""
+                                    masked="false"
+                                    name="SNOW_password"
+                                    required="true"
+                                    testWith=""
+                                    type="string"/>
+               <connectionAttribute description=""
+                                    masked="false"
+                                    name="SNOW_ServiceUrl"
+                                    required="true"
+                                    testWith=""
+                                    type="string"/>
+               <connectionAttribute description=""
+                                    masked="false"
+                                    name="SNOW_grant_type"
+                                    required="true"
+                                    testWith=""
+                                    type="string"/>
+            </connectionAttributes>
+            <actions>
+               <action category=""
+                       failOnError="true"
+                       forSearch="false"
+                       label="Access Token"
+                       maxRedirects="100"
+                       name="Access Token"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description/>
+                  <input/>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{$SNOW_ServiceUrl}/oauth_token.do"
+                                        verb="POST">
+                        <otherParams>
+                           <otherParam name="grant_type">{$SNOW_grant_type}</otherParam>
+                           <otherParam name="client_id">{$SNOW_client_id}</otherParam>
+                           <otherParam name="client_secret">{$SNOW_client_secret}</otherParam>
+                           <otherParam name="username">{$SNOW_username}</otherParam>
+                           <otherParam name="password">{$SNOW_password}</otherParam>
+                        </otherParams>
+                        <body generateUsing="Form"/>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description=""
+                            name="access_token"
+                            property="access_token"
+                            type="string"/>
+                     <field description=""
+                            name="refresh_token"
+                            property="refresh_token"
+                            type="string"/>
+                     <field description="" entireResponse="true" name="All" type="string"/>
+                  </output>
+               </action>
+               <action category=""
+                       failOnError="true"
+                       forSearch="false"
+                       label="Get Accounts"
+                       maxRedirects="100"
+                       name="Get Accounts"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description/>
+                  <input>
+                     <parameter label="sys_id"
+                                name="sys_id"
+                                required="true"
+                                testWith="dy9JUXWYvD390I8l4p-Slt557BC0s76m2_POJXrADxTdqy6fjvrwDo8w7C9yvIzuAThpf4wkOEwOtXEblnTiig"
+                                type="string"/>
+                     <parameter label="access_token"
+                                name="access_token"
+                                nogen="true"
+                                required="true"
+                                testWith="FUtsf6bME6iSi7r4bjMBmpthWv63IOfe2IB5ealv7wcp4RGw4kyPEoaplTlkSl1FhCg0vnkwEeLY-gnN2ynuCQ"
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{$SNOW_ServiceUrl}/api/now/v1/table/customer_account/{$sys_id}"
+                                        verb="GET">
+                        <otherParams>
+                           <otherParam name="sysparm_display_value">true</otherParam>
+                        </otherParams>
+                        <httpHeaders>
+                           <header name="Accept">application/json</header>
+                           <header name="Authorization">Bearer {$access_token}</header>
+                        </httpHeaders>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description="" name="city" property="city" type="string"/>
+                     <field description="" name="name" property="name" type="string"/>
+                     <field description="" name="zip" property="zip" type="string"/>
+                     <field description=""
+                            name="u_sfdcid"
+                            property="u_sfdcid"
+                            type="string"/>
+                     <field description="" name="sys_id" property="sys_id" type="string"/>
+                  </output>
+               </action>
+               <action category=""
+                       failOnError="true"
+                       forSearch="false"
+                       label="Create Accounts"
+                       maxRedirects="100"
+                       name="Create Accounts"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description/>
+                  <input>
+                     <parameter label="i_city"
+                                name="i_city"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_name"
+                                name="i_name"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_zip"
+                                name="i_zip"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="access_token"
+                                name="access_token"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{$SNOW_ServiceUrl}/api/now/v1/table/customer_account"
+                                        verb="POST">
+                        <otherParams>
+                           <otherParam name="city">{$i_city}</otherParam>
+                           <otherParam name="name">{$i_name}</otherParam>
+                           <otherParam name="zip">{$i_zip}</otherParam>
+                        </otherParams>
+                        <httpHeaders>
+                           <header name="Accept">application/json</header>
+                           <header name="Authorization">Bearer {$access_token}</header>
+                        </httpHeaders>
+                        <body generateUsing="JSON" preserveJsonStringFormatting="false"/>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description="" name="o_sys_id" property="sys_id" type="string"/>
+                  </output>
+               </action>
+               <action category=""
+                       failOnError="true"
+                       forSearch="false"
+                       label="Update Accounts"
+                       maxRedirects="100"
+                       name="Update Accounts"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description/>
+                  <input>
+                     <parameter label="i_sys_id"
+                                name="i_sys_id"
+                                required="true"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_city"
+                                name="i_city"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_zip"
+                                name="i_zip"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_name"
+                                name="i_name"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{$SNOW_ServiceUrl}/api/now/v1/table/customer_account/{$i_sys_id}"
+                                        verb="PUT">
+                        <otherParams>
+                           <otherParam name="city">{$i_city}</otherParam>
+                           <otherParam name="zip">{$i_zip}</otherParam>
+                           <otherParam name="name">{$i_name}</otherParam>
+                           <otherParam name="u_sfdcid">{$i_sfdc_id}</otherParam>
+                        </otherParams>
+                        <httpHeaders>
+                           <header name="Content-Type">application/json</header>
+                           <header name="Authorization">Bearer zZiV3CY9Hk7zvQDXxuafrPTUqZ3KpBbUhBuEmji2ltkfWLypgwKjaVaH454M7pz30y7IbqQVCyuj0ebZUu5L-w</header>
+                        </httpHeaders>
+                        <body generateUsing="JSON" preserveJsonStringFormatting="false"/>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description="" name="o_sys_id" property="sys_id" type="string"/>
+                  </output>
+               </action>
+               <action category=""
+                       failOnError="true"
+                       forSearch="false"
+                       label="Get Contacts"
+                       maxRedirects="100"
+                       name="Get Contacts"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description/>
+                  <input>
+                     <parameter label="i_sys_id"
+                                name="i_sys_id"
+                                required="true"
+                                testWith=""
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{$SNOW_ServiceUrl}/api/now/v1/table/customer_contact/{$i_sys_id}"
+                                        verb="GET">
+                        <otherParams>
+                           <otherParam name="sysparm_display_value">true</otherParam>
+                        </otherParams>
+                        <httpHeaders>
+                           <header name="Accept">application/json</header>
+                           <header name="Authorization">Bearer hvw-wuFgUhZv9y9W0xux4B2je7K46KR6GIbh8-lk0mE2zgZd_eeYj71RElKNuCY46C7zSHq7SF775yTWO1NHHQ</header>
+                        </httpHeaders>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description=""
+                            name="o_first_name"
+                            property="first_name"
+                            type="string"/>
+                     <field description=""
+                            name="o_last_name"
+                            property="last_name"
+                            type="string"/>
+                     <field description="" name="o_email" property="email" type="string"/>
+                     <field description="" name="o_title" property="title" type="string"/>
+                     <field description="" name="o_sys_id" property="sys_id" type="string"/>
+                     <field description=""
+                            name="o_u_sfdcid"
+                            property="u_sfdcid"
+                            type="string"/>
+                  </output>
+               </action>
+               <action category=""
+                       failOnError="true"
+                       forSearch="false"
+                       label="Create Contacts"
+                       maxRedirects="100"
+                       name="Create Contacts"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description/>
+                  <input>
+                     <parameter label="i_last_name"
+                                name="i_last_name"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_first_name"
+                                name="i_first_name"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_title"
+                                name="i_title"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_contact_id"
+                                name="i_contact_id"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_email"
+                                name="i_email"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{$SNOW_ServiceUrl}/api/now/v1/table/customer_contact"
+                                        verb="POST">
+                        <otherParams>
+                           <otherParam name="first_name">{$i_first_name}</otherParam>
+                           <otherParam name="last_name">{$i_last_name}</otherParam>
+                           <otherParam name="email">{$i_email}</otherParam>
+                           <otherParam name="u_sfdcid">{$i_contact_id}</otherParam>
+                        </otherParams>
+                        <httpHeaders>
+                           <header name="Accept">application/json</header>
+                           <header name="Authorization">Bearer OHXwCcmGUpEO40QcL3dZpby9sxSBUY1xJn0b9pOEot0gbiK8j4uhvR-WJAZlwjgM2uRGw2fIwD8v2BbCMkZNGA</header>
+                        </httpHeaders>
+                        <body generateUsing="JSON" preserveJsonStringFormatting="false"/>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description="" name="o_sys_id" property="sys_id" type="string"/>
+                  </output>
+               </action>
+               <action category=""
+                       failOnError="true"
+                       forSearch="false"
+                       label="Update Contacts"
+                       maxRedirects="100"
+                       name="Update Contacts"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description/>
+                  <input>
+                     <parameter label="i_last_name"
+                                name="i_last_name"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_first_name"
+                                name="i_first_name"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_title"
+                                name="i_title"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_u_contact_id"
+                                name="i_u_contact_id"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_email"
+                                name="i_email"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_sys_id"
+                                name="i_sys_id"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{$SNOW_ServiceUrl}/api/now/v1/table/customer_contact/{$i_sys_id}"
+                                        verb="PUT">
+                        <otherParams>
+                           <otherParam name="first_name">{$i_first_name}</otherParam>
+                           <otherParam name="last_name">{$i_last_name}</otherParam>
+                           <otherParam name="email">{$i_email}</otherParam>
+                           <otherParam name="u_sfdcid">{$i_u_contact_id}</otherParam>
+                        </otherParams>
+                        <httpHeaders>
+                           <header name="Content-Type">application/json</header>
+                           <header name="Authorization">Bearer OHXwCcmGUpEO40QcL3dZpby9sxSBUY1xJn0b9pOEot0gbiK8j4uhvR-WJAZlwjgM2uRGw2fIwD8v2BbCMkZNGA</header>
+                        </httpHeaders>
+                        <body generateUsing="JSON" preserveJsonStringFormatting="false"/>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description="" name="o_sys_id" property="sys_id" type="string"/>
+                  </output>
+               </action>
+               <action category=""
+                       failOnError="true"
+                       forSearch="false"
+                       label="Get Cases"
+                       maxRedirects="100"
+                       name="Get Cases"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description/>
+                  <input>
+                     <parameter label="i_sys_id"
+                                name="i_sys_id"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{$SNOW_ServiceUrl}/api/now/v1/table/sn_customerservice_case/{$i_sys_id}"
+                                        verb="GET">
+                        <otherParams>
+                           <otherParam name="sysparm_display_value">true</otherParam>
+                        </otherParams>
+                        <httpHeaders>
+                           <header name="Accept">application/json</header>
+                           <header name="Authorization">Bearer hvw-wuFgUhZv9y9W0xux4B2je7K46KR6GIbh8-lk0mE2zgZd_eeYj71RElKNuCY46C7zSHq7SF775yTWO1NHHQ</header>
+                        </httpHeaders>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description=""
+                            name="o_case_num"
+                            property="number"
+                            type="string"/>
+                     <field description=""
+                            name="o_short_desc"
+                            property="short_description"
+                            type="string"/>
+                     <field description="" name="o_sys_id" property="sys_id" type="string"/>
+                     <field description=""
+                            name="o_u_sfdcid"
+                            property="u_sfdcid"
+                            type="string"/>
+                     <field description=""
+                            name="o_u_status"
+                            property="u_status"
+                            type="string"/>
+                     <field description=""
+                            name="o_u_case_origin"
+                            property="u_case_origin"
+                            type="string"/>
+                     <field description=""
+                            name="o_priority"
+                            property="priority"
+                            type="string"/>
+                  </output>
+               </action>
+               <action category=""
+                       failOnError="true"
+                       forSearch="false"
+                       label="Create Cases"
+                       maxRedirects="100"
+                       name="Create Cases"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description/>
+                  <input>
+                     <parameter label="i_short_desc"
+                                name="i_short_desc"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_case_id"
+                                name="i_case_id"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_u_status"
+                                name="i_u_status"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_u_case_origin"
+                                name="i_u_case_origin"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_priority"
+                                name="i_priority"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_token"
+                                name="i_token"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{$SNOW_ServiceUrl}/api/now/v1/table/sn_customerservice_case"
+                                        verb="POST">
+                        <otherParams>
+                           <otherParam name="short_description">{$i_short_desc}</otherParam>
+                           <otherParam name="u_sfdcid">{$i_case_id}</otherParam>
+                           <otherParam name="u_status">{$i_u_status}</otherParam>
+                           <otherParam name="u_case_origin">{$i_u_case_origin}</otherParam>
+                           <otherParam name="priority">{$i_priority}</otherParam>
+                        </otherParams>
+                        <httpHeaders>
+                           <header name="Accept">application/json</header>
+                           <header name="Authorization">Bearer {$i_token}</header>
+                        </httpHeaders>
+                        <body generateUsing="JSON" preserveJsonStringFormatting="false"/>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description=""
+                            name="case_number"
+                            property="number"
+                            type="string"/>
+                  </output>
+               </action>
+               <action category=""
+                       failOnError="true"
+                       forSearch="false"
+                       label="Update Cases"
+                       maxRedirects="100"
+                       name="Update Cases"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description/>
+                  <input>
+                     <parameter label="i_short_desc"
+                                name="i_short_desc"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_u_case_id"
+                                name="i_u_case_id"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_sys_id"
+                                name="i_sys_id"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_u_status"
+                                name="i_u_status"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_u_case_origin"
+                                name="i_u_case_origin"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter label="i_priority"
+                                name="i_priority"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{$SNOW_ServiceUrl}/api/now/v1/table/sn_customerservice_case/{$i_sys_id}"
+                                        verb="PUT">
+                        <otherParams>
+                           <otherParam name="short_description">{$i_short_desc}</otherParam>
+                           <otherParam name="u_case_id">{$i_u_case_id}</otherParam>
+                           <otherParam name="u_status">{$i_u_status}</otherParam>
+                           <otherParam name="u_case_origin">{$i_u_case_origin}</otherParam>
+                           <otherParam name="priority">{$i_priority}</otherParam>
+                        </otherParams>
+                        <httpHeaders>
+                           <header name="Content-Type">application/json</header>
+                           <header name="Authorization">Bearer OHXwCcmGUpEO40QcL3dZpby9sxSBUY1xJn0b9pOEot0gbiK8j4uhvR-WJAZlwjgM2uRGw2fIwD8v2BbCMkZNGA</header>
+                        </httpHeaders>
+                        <body generateUsing="JSON" preserveJsonStringFormatting="false"/>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description="" name="o_sys_id" property="sys_id" type="string"/>
+                  </output>
+               </action>
+               <action category="WO"
+                       failOnError="true"
+                       forSearch="false"
+                       label="Get WorkOrder"
+                       maxRedirects="100"
+                       name="Get WorkOrder"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description/>
+                  <input>
+                     <parameter name="sys_id"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                     <parameter name="token"
+                                nogen="true"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{$SNOW_ServiceUrl}/api/now/table/wm_order/{$sys_id}"
+                                        verb="GET">
+                        <httpHeaders>
+                           <header name="Authorization">Bearer {$token}</header>
+                        </httpHeaders>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description="" name="WONumber" type="string">
+                        <xquery>{//number}</xquery>
+                     </field>
+                     <field description="" name="sys_id" type="string">
+                        <xquery>{//sys_id}</xquery>
+                     </field>
+                  </output>
+               </action>
+               <action category="WO"
+                       failOnError="true"
+                       forSearch="false"
+                       label="Create WorkOrder"
+                       maxRedirects="100"
+                       name="Create WorkOrder"
+                       preemptiveAuth="true"
+                       responseEncoding="">
+                  <description/>
+                  <input>
+                     <parameter name="token"
+                                nogen="true"
+                                required="true"
+                                testWith=""
+                                type="string"/>
+                     <parameter name="short_description"
+                                required="false"
+                                testWith=""
+                                type="string"/>
+                  </input>
+                  <binding>
+                     <restSimpleBinding multiUsing="semicolonSeparated"
+                                        url="{$SNOW_ServiceUrl}/api/now/table/wm_order"
+                                        verb="POST">
+                        <authentication>
+                           <username>159107</username>
+                           <password/>
+                           <isExpressionInPassword>false</isExpressionInPassword>
+                        </authentication>
+                        <httpHeaders>
+                           <header name="Authorization">Bearer {$token}</header>
+                        </httpHeaders>
+                        <body generateUsing="JSON" preserveJsonStringFormatting="true"/>
+                     </restSimpleBinding>
+                  </binding>
+                  <output>
+                     <field description="" name="sys_id" property="sys_id" type="string"/>
+                     <field description="" name="woNumber" property="number" type="string"/>
+                  </output>
+               </action>
+            </actions>
+            <objects/>
+         </businessConnector>
+      </types1:Entry>
+      <types1:GUID>3UocEiUd02Jb63QVuZGgaH</types1:GUID>
+      <types1:DisplayName>ServiceNow Table API</types1:DisplayName>
+   </types1:Item>
+   <types1:CurrentServerDateTime>2020-12-07T20:49:12.541Z</types1:CurrentServerDateTime>
+</aetgt:getResponse>

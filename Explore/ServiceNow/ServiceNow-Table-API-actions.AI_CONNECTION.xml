@@ -1,0 +1,49 @@
+<aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.com/appmodules/repository/2010/10/avrepository.xsd"
+                   xmlns:types1="http://schemas.active-endpoints.com/appmodules/repository/2010/10/avrepository.xsd">
+   <types1:Item>
+      <types1:EntryId>J5bfOC2XZPnE29E-gt-205797-2020-09-22T17:49:01.356Z::conn.xml</types1:EntryId>
+      <types1:Name>ServiceNow-Table-API-actions</types1:Name>
+      <types1:ParentFlowIds>RruYZ06NYcmYsGu-gt-490852-2020-09-22T17:49:01.769Z::pd.xml,unOjseGbciZBpDU-gt-490862-2020-09-22T17:49:01.833Z::pd.xml</types1:ParentFlowIds>
+      <types1:MimeType>application/xml+connection</types1:MimeType>
+      <types1:Description/>
+      <types1:AppliesTo/>
+      <types1:Tags/>
+      <types1:VersionLabel>1.0</types1:VersionLabel>
+      <types1:State>CURRENT</types1:State>
+      <types1:ProcessGroup/>
+      <types1:CreatedBy>basav1@iics.com</types1:CreatedBy>
+      <types1:CreationDate>2020-09-22T17:49:01Z</types1:CreationDate>
+      <types1:ModifiedBy/>
+      <types1:PublicationStatus>unpublished</types1:PublicationStatus>
+      <types1:AutosaveExists>false</types1:AutosaveExists>
+      <types1:Entry>
+         <connection xmlns="http://schemas.informatica.com/socrates/data-services/2014/04/avosConnections.xsd"
+                     displayName="ServiceNow-Table-API-actions"
+                     label="ServiceNow-Table-API-actions"
+                     name="ServiceNow-Table-API-actions">
+            <description/>
+            <tags/>
+            <agent/>
+            <attributes>
+               <attribute encrypted="false" name="SNOW_client_id" value=""/>
+               <attribute encrypted="false" name="SNOW_client_secret" value=""/>
+               <attribute encrypted="false" name="SNOW_username" value=""/>
+               <attribute encrypted="false" name="SNOW_password" value=""/>
+               <attribute encrypted="false" name="SNOW_ServiceUrl" value=""/>
+               <attribute encrypted="false" name="SNOW_grant_type" value=""/>
+            </attributes>
+            <businessConnector xmlns="http://schemas.informatica.com/appmodules/screenflow/2014/04/avosConnectors.xsd"
+                               agentOnly="false"
+                               connectorPath="project:/rt.connector/ServiceNow_Table_API/ServiceNow_Table_API_svcDef.xml"
+                               name="ServiceNow_Table_API"
+                               supportsConnectionTest="false"
+                               uuid="695caafc-f53e-41d0-b1d4-f65144d76bb5">
+               <description/>
+            </businessConnector>
+         </connection>
+      </types1:Entry>
+      <types1:GUID>a1iOfgZ8ePEkDnwrQktviJ</types1:GUID>
+      <types1:DisplayName>ServiceNow-Table-API-actions</types1:DisplayName>
+   </types1:Item>
+   <types1:CurrentServerDateTime>2020-12-07T20:49:12.553Z</types1:CurrentServerDateTime>
+</aetgt:getResponse>

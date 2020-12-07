@@ -1,0 +1,107 @@
+<aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.com/appmodules/repository/2010/10/avrepository.xsd"
+                   xmlns:types1="http://schemas.active-endpoints.com/appmodules/repository/2010/10/avrepository.xsd">
+   <types1:Item>
+      <types1:EntryId>RruYZ06NYcmYsGu-gt-490852-2020-09-22T17:49:01.769Z::pd.xml</types1:EntryId>
+      <types1:Name>Retrieve_account_data_from_ServiceNow</types1:Name>
+      <types1:MimeType>application/xml+process</types1:MimeType>
+      <types1:Description>This process is invoked with a ServiceNow account ID. ServiceNow credentials are embedded in the ServiceNow-Table-API-actions connection. A valid sys_id of an account is passed when invoking the process. The value returned from the "Create an account in ServiceNow" process can be used as an input.</types1:Description>
+      <types1:AppliesTo/>
+      <types1:Tags>.anonymous</types1:Tags>
+      <types1:VersionLabel>1.0</types1:VersionLabel>
+      <types1:State>CURRENT</types1:State>
+      <types1:ProcessGroup/>
+      <types1:CreatedBy>basav1@iics.com</types1:CreatedBy>
+      <types1:CreationDate>2020-09-22T17:49:02Z</types1:CreationDate>
+      <types1:ModifiedBy/>
+      <types1:PublicationStatus>unpublished</types1:PublicationStatus>
+      <types1:AutosaveExists>false</types1:AutosaveExists>
+      <types1:Entry>
+         <process xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2010/10/avosScreenflow.xsd"
+                  xmlns:list="urn:activevos:spi:list:functions"
+                  displayName="Retrieve account data from ServiceNow"
+                  name="Retrieve_account_data_from_ServiceNow">
+            <appliesTo/>
+            <description>This process is invoked with a ServiceNow account ID. ServiceNow credentials are embedded in the ServiceNow-Table-API-actions connection. A valid sys_id of an account is passed when invoking the process. The value returned from the "Create an account in ServiceNow" process can be used as an input.</description>
+            <tags>.anonymous</tags>
+            <generator>Informatica Process Designer 9</generator>
+            <input>
+               <parameter description="an account identifer"
+                          name="input_sys_id"
+                          type="string">
+                  <options>
+                     <option name="required">false</option>
+                  </options>
+               </parameter>
+            </input>
+            <output>
+               <field description="" name="o_AccessToken" type="string">
+                  <options>
+                     <option name="required">false</option>
+                  </options>
+               </field>
+               <field description="" name="o_RefreshToken" type="string">
+                  <options>
+                     <option name="required">false</option>
+                  </options>
+               </field>
+               <field description="" name="a_sys_id" type="string">
+                  <options>
+                     <option name="required">false</option>
+                  </options>
+               </field>
+               <field description="" name="o_city" type="string">
+                  <options>
+                     <option name="required">false</option>
+                  </options>
+               </field>
+               <field description="" name="o_name" type="string">
+                  <options>
+                     <option name="required">false</option>
+                  </options>
+               </field>
+            </output>
+            <notes/>
+            <deployment suspendOnFault="false" tracingLevel="verbose">
+               <rest>
+                  <allowAnonymousAccess/>
+               </rest>
+            </deployment>
+            <flow id="a">
+               <start id="b">
+                  <link id="jky7wdra" targetId="jky7wdr9"/>
+               </start>
+               <service id="jky7wdr9">
+                  <title>Generate Access Token</title>
+                  <serviceName>ServiceNow-Table-API-actions:Access Token</serviceName>
+                  <serviceGUID>a1iOfgZ8ePEkDnwrQktviJ</serviceGUID>
+                  <serviceInput/>
+                  <link id="jlo4r9wj" targetId="jl2f6n6l"/>
+               </service>
+               <service id="jl2f6n6l">
+                  <title>Get Accounts</title>
+                  <serviceName>ServiceNow-Table-API-actions:Get Accounts</serviceName>
+                  <serviceGUID>a1iOfgZ8ePEkDnwrQktviJ</serviceGUID>
+                  <serviceInput>
+                     <parameter name="sys_id" source="field" updatable="true">input.input_sys_id</parameter>
+                     <parameter name="access_token" source="field" updatable="true">output.access_token</parameter>
+                  </serviceInput>
+                  <link id="jl2f6n6n" targetId="jky7wdrg"/>
+               </service>
+               <assignment id="jky7wdrg">
+                  <title>Map Access and Refresh Tokens to output</title>
+                  <operation source="field" to="output.o_RefreshToken">output.refresh_token</operation>
+                  <operation source="field" to="output.o_AccessToken">output.access_token</operation>
+                  <operation source="field" to="output.a_sys_id">output.sys_id</operation>
+                  <operation source="field" to="output.o_city">output.city</operation>
+                  <operation source="field" to="output.o_name">output.name</operation>
+                  <link id="jky7wdri" targetId="c"/>
+               </assignment>
+               <end id="c"/>
+            </flow>
+         </process>
+      </types1:Entry>
+      <types1:GUID>7KFf9ysdy1ZfP3S4D4c5Y3</types1:GUID>
+      <types1:DisplayName>Retrieve account data from ServiceNow</types1:DisplayName>
+   </types1:Item>
+   <types1:CurrentServerDateTime>2020-12-07T20:49:12.67Z</types1:CurrentServerDateTime>
+</aetgt:getResponse>
