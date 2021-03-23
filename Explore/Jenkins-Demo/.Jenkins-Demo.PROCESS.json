@@ -1,0 +1,24 @@
+{
+  "objectInfo" : {
+    "id" : "7qa32aa7P1LfprvaF1FLwG",
+    "name" : "Jenkins-Demo",
+    "type" : "PROCESS",
+    "metadata" : {
+      "modelVersion" : {
+        "major" : 1,
+        "minor" : 0
+      },
+      "repoInfo" : {
+        "repoHandle" : "clBghNf4TsrT2ht-gt-20408270-2021-03-23T13:10:15.043Z::pd.xml"
+      },
+      "contextAttributes" : null,
+      "additionalInfo" : {
+        "description" : "",
+        "contentType" : "application/json; charset=utf-8",
+        "documentState" : "VALID"
+      }
+    }
+  },
+  "dataFileExtension" : "xml",
+  "objectRefs" : [ ]
+}
